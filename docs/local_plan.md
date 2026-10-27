@@ -126,7 +126,7 @@ Disk breakdown (sizes *(assumed)* unless stated):
    - `backup_state.sh` after costly steps, as an off-site copy (still required: the laptop disk is now the only live copy);
    - remove the proxy notes.
    - Keep the working rules, the no-book-text-in-git rule and the no-paid-API rule unchanged.
-2. **Thread count from an env var** (`HPDRILL_THREADS`, default 4) in `asr.py` and `align.py`. Then
+2. **Thread count from an env var** (`BATKOL_THREADS`, default 4) in `asr.py` and `align.py`. Then
    re-time the slice with the laptop's real core count. Physical cores, not threads, usually win for
    CTranslate2 *(assumed)*.
 3. **Chapter registry:** generate `sources_local.py` entries for the remaining chapters (globs, as for
