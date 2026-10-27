@@ -466,8 +466,10 @@ def schedule(items, sents, frames, passage, k, combo=(), reviews=()):
 
 def render(src, timeline, out, name):
     files = {k: v.local for k, v in src.idx.items()}
-    cache, by_src = {}, {}
+    cache, by_src, heard = {}, {}, {}
     for c in timeline:
+        if "clip" in c:
+            heard[c["clip"]["id"]] = heard.get(c["clip"]["id"], 0) + 1
         if "clip" not in c or c["clip"]["id"] in cache:
             continue
         cl = c["clip"]
@@ -483,7 +485,7 @@ def render(src, timeline, out, name):
         by_src.setdefault(cl["src"], []).append(cl["id"])
     gains = {}
     for s, keys in by_src.items():
-        xs, g = build.match_loudness([cache[k] for k in keys])
+        xs, g = build.match_loudness([cache[k] for k in keys], weights=[heard[k] for k in keys])
         cache.update(zip(keys, xs))
         gains[s] = round(g, 1)
     parts, pos, sidecar = [], 0, []

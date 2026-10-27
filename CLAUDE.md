@@ -62,6 +62,8 @@ See `docs/flow_v2.md` for the reasons, with data, and the status.
 3. **Cut and render:** index lookups plus ffmpeg (`batkol/lesson.py`). Lessons continue in chapter
    order. Reviews come from the learner state (`batkol/learner.py`, `~/work/learner/state.json`;
    one lesson per day assumed).
+   Levels (`batkol/build.py`): every source to -18 LUFS; an utterance more than 3 dB off is pulled
+   back (by at most 6 dB); a -1 dBFS look-ahead limiter on the final mix.
 4. **QA:** listening verdicts (gate builds) and sampled re-transcription (measures the
    index, never gates), both in `~/work/bank/spans.jsonl` (`batkol/clipbank.py`).
 
