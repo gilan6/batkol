@@ -31,7 +31,8 @@ The same pipeline also builds lessons from learner content: 50languages, a free 
 
 Batkol's output is MP3 files, for any audio player, with no screen needed. The videos below
 exist only for this page: they add captions so you can follow what you hear. Each example's
-MP3 is linked under it.
+MP3 is linked under it. Every voice (narrator, cue, instruction) is leveled to the same
+loudness, so none of them is noticeably louder or quieter than the others.
 
 ### Pimsleur-style lessons
 
@@ -40,9 +41,9 @@ Dutch narrator follows, then a pause where you repeat. Long phrases are built up
 end, and items come back at growing intervals and as reviews in later lessons. Lessons train
 pronunciation, and they also improve comprehension.
 
-https://github.com/user-attachments/assets/c7c386ac-30b8-4532-8bec-c2c519485a46
+https://github.com/user-attachments/assets/9c2955b6-9bca-40a9-9e74-ba691a98faf6
 
-*Example: one item from lesson 1 (45 s). "How do you say…", the English line, your turn,
+*Example: one item from lesson 1 (46 s). "How do you say…", the English line, your turn,
 the Dutch narrator, your turn. Then "Listen and repeat", and the phrase built up from its end.
 [Listen to the MP3](https://github.com/gilan6/batkol/releases/download/readme-examples/lesson_example.mp3)*
 
@@ -52,7 +53,7 @@ One MP3 per chapter: every sentence in Dutch, then English, then Dutch again, wi
 gaps. You hear the sentence, get its meaning, then hear it again knowing what it says. It
 trains listening comprehension.
 
-https://github.com/user-attachments/assets/4238a3bf-8a58-4b0a-9928-600003d51b92
+https://github.com/user-attachments/assets/f23da0b2-169e-4185-8763-9291386da2da
 
 *Example: one sentence from book 2, chapter 1 (10 s), taken from the 56-minute chapter file.
 [Listen to the MP3](https://github.com/gilan6/batkol/releases/download/readme-examples/interleaved_example.mp3)*
@@ -63,7 +64,7 @@ The same lesson pattern, built from 50languages. Each Dutch sentence comes from 
 speakers, and you repeat after both. How the source is laid out, and how lessons are built
 from it, is in `docs/local_plan.md` §7.
 
-https://github.com/user-attachments/assets/ad3b84dd-73da-471b-823a-ce329506836a
+https://github.com/user-attachments/assets/cabad96b-aea8-46d7-b5a7-bf93f8a671c9
 
 *Example: one item from lesson 1 (21 s). "How do you say…", the English line, your turn, then the first and
 the second Dutch speaker, each followed by your turn. Audio © Goethe Verlag (50languages),
