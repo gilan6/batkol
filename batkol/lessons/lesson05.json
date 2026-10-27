@@ -1,0 +1,333 @@
+{
+ "comment": "Book-token ranges only (no book text); glosses are literal English written for the drill. Continues lesson04 in chapter order (unit 13 on).",
+ "lesson": "lesson05",
+ "day": 5,
+ "chapter": "ch01",
+ "minutes": 30,
+ "items": [
+  {
+   "id": "U13",
+   "unit": 13,
+   "nl_book": [
+    328,
+    355
+   ],
+   "parts": [
+    {
+     "nl_book": [
+      328,
+      338
+     ],
+     "en_book": [
+      307,
+      319
+     ],
+     "gloss": "Mr Dursley hummed as he chose his most boring tie for work"
+    },
+    {
+     "nl_book": [
+      339,
+      346
+     ],
+     "en_book": [
+      320,
+      325
+     ],
+     "gloss": "and Mrs Dursley gossiped away happily"
+    },
+    {
+     "nl_book": [
+      347,
+      355
+     ],
+     "en_book": [
+      326,
+      335
+     ],
+     "gloss": "while she wrestled a screaming Dudley into his high chair"
+    }
+   ]
+  },
+  {
+   "id": "U14",
+   "unit": 14,
+   "nl_book": [
+    356,
+    368
+   ],
+   "parts": [
+    {
+     "nl_book": [
+      356,
+      364
+     ],
+     "en_book": [
+      336,
+      343
+     ],
+     "gloss": "none of them saw a large tawny owl"
+    },
+    {
+     "nl_book": [
+      365,
+      368
+     ],
+     "en_book": [
+      344,
+      347
+     ],
+     "gloss": "flutter past the window"
+    }
+   ]
+  },
+  {
+   "id": "U15",
+   "unit": 15,
+   "nl_book": [
+    369,
+    407
+   ],
+   "parts": [
+    {
+     "nl_book": [
+      369,
+      375
+     ],
+     "en_book": [
+      348,
+      357
+     ],
+     "gloss": "at half past eight Mr Dursley picked up his briefcase"
+    },
+    {
+     "nl_book": [
+      376,
+      383
+     ],
+     "en_book": [
+      358,
+      363
+     ],
+     "gloss": "gave Mrs Dursley a kiss on her cheek"
+    },
+    {
+     "nl_book": [
+      384,
+      391
+     ],
+     "en_book": [
+      364,
+      369
+     ],
+     "gloss": "and tried to give Dudley a kiss too"
+    },
+    {
+     "nl_book": [
+      392,
+      400
+     ],
+     "en_book": [
+      370,
+      378
+     ],
+     "gloss": "but that failed because Dudley was just having a tantrum"
+    },
+    {
+     "nl_book": [
+      401,
+      407
+     ],
+     "en_book": [
+      379,
+      385
+     ],
+     "gloss": "and threw his cornflakes at the wall"
+    }
+   ]
+  },
+  {
+   "id": "U16",
+   "unit": 16,
+   "nl_book": [
+    408,
+    412
+   ],
+   "gloss": "'Little rascal,' chuckled Mr Dursley."
+  },
+  {
+   "id": "U17",
+   "unit": 17,
+   "nl_book": [
+    413,
+    423
+   ],
+   "en_book": [
+    396,
+    407
+   ]
+  },
+  {
+   "id": "U18",
+   "unit": 18,
+   "nl_book": [
+    424,
+    444
+   ],
+   "parts": [
+    {
+     "nl_book": [
+      424,
+      430
+     ],
+     "en_book": [
+      408,
+      415
+     ],
+     "gloss": "only at the corner of the street"
+    },
+    {
+     "nl_book": [
+      431,
+      437
+     ],
+     "en_book": [
+      416,
+      424
+     ],
+     "gloss": "did he notice something strange for the first time"
+    },
+    {
+     "nl_book": [
+      438,
+      444
+     ],
+     "en_book": [
+      425,
+      429
+     ],
+     "gloss": "a cat looking at a map"
+    }
+   ]
+  },
+  {
+   "id": "U19a",
+   "unit": 19,
+   "nl_book": [
+    445,
+    452
+   ],
+   "en_book": [
+    430,
+    440
+   ]
+  },
+  {
+   "id": "U19b",
+   "unit": 19,
+   "nl_book": [
+    453,
+    465
+   ],
+   "en_book": [
+    441,
+    449
+   ]
+  },
+  {
+   "id": "U20a",
+   "unit": 20,
+   "nl_book": [
+    466,
+    477
+   ],
+   "en_book": [
+    450,
+    461
+   ]
+  },
+  {
+   "id": "U20b",
+   "unit": 20,
+   "nl_book": [
+    478,
+    484
+   ],
+   "en_book": [
+    462,
+    468
+   ]
+  },
+  {
+   "id": "U21",
+   "unit": 21,
+   "nl_book": [
+    485,
+    489
+   ],
+   "en_book": [
+    469,
+    475
+   ]
+  },
+  {
+   "id": "U22",
+   "unit": 22,
+   "nl_book": [
+    490,
+    505
+   ],
+   "parts": [
+    {
+     "nl_book": [
+      490,
+      494
+     ],
+     "en_book": [
+      476,
+      484
+     ],
+     "gloss": "of course it had been an optical illusion"
+    },
+    {
+     "nl_book": [
+      495,
+      505
+     ],
+     "en_book": [
+      485,
+      492
+     ],
+     "gloss": "Mr Dursley blinked and stared at the cat"
+    }
+   ]
+  },
+  {
+   "id": "U23",
+   "unit": 23,
+   "nl_book": [
+    506,
+    509
+   ],
+   "en_book": [
+    493,
+    495
+   ]
+  },
+  {
+   "id": "U24",
+   "unit": 24,
+   "nl_book": [
+    510,
+    520
+   ],
+   "en_book": [
+    496,
+    513
+   ]
+  }
+ ],
+ "sentences": [
+  19,
+  20
+ ]
+}

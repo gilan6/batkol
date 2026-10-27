@@ -1,0 +1,13 @@
+# code only: no book text, audio, or outputs
+work/
+.venv/
+__pycache__/
+*.opus
+*.mp3
+*.wav
+*.flac
+*.epub
+*.tsv
+*.txt.gz
+# your own file names: copy batkol/sources_local.example.py
+batkol/sources_local.py

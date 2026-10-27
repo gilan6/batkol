@@ -1,0 +1,233 @@
+{
+ "comment": "Items as book-token ranges (nl_book / en_book: first,last index into the chapter's spoken tokens); no book text. Continues lesson01 in chapter order; due items from earlier lessons come from the learner state.",
+ "lesson": "lesson02",
+ "day": 2,
+ "chapter": "ch01",
+ "minutes": 30,
+ "items": [
+  {
+   "id": "F",
+   "unit": 3,
+   "nl_book": [
+    71,
+    80
+   ],
+   "en_book": [
+    64,
+    73
+   ]
+  },
+  {
+   "id": "G",
+   "unit": 3,
+   "nl_book": [
+    81,
+    85
+   ],
+   "en_book": [
+    74,
+    81
+   ]
+  },
+  {
+   "id": "H",
+   "unit": 4,
+   "nl_book": [
+    86,
+    101
+   ],
+   "en_book": [
+    82,
+    96
+   ]
+  },
+  {
+   "id": "I",
+   "unit": 4,
+   "nl_book": [
+    102,
+    118
+   ],
+   "en_book": [
+    97,
+    117
+   ]
+  },
+  {
+   "id": "J",
+   "unit": 5,
+   "nl_book": [
+    119,
+    124
+   ],
+   "en_book": [
+    118,
+    125
+   ]
+  },
+  {
+   "id": "K",
+   "unit": 5,
+   "nl_book": [
+    125,
+    137
+   ],
+   "en_book": [
+    126,
+    135
+   ]
+  },
+  {
+   "id": "L",
+   "unit": 6,
+   "nl_book": [
+    138,
+    145
+   ],
+   "en_book": [
+    136,
+    141
+   ]
+  },
+  {
+   "id": "M",
+   "unit": 6,
+   "nl_book": [
+    146,
+    151
+   ],
+   "en_book": [
+    142,
+    147
+   ]
+  },
+  {
+   "id": "N",
+   "unit": 6,
+   "nl_book": [
+    152,
+    161
+   ],
+   "en_book": [
+    148,
+    157
+   ]
+  },
+  {
+   "id": "O",
+   "unit": 7,
+   "nl_book": [
+    162,
+    175
+   ],
+   "en_book": [
+    158,
+    171
+   ]
+  },
+  {
+   "id": "P",
+   "unit": 8,
+   "nl_book": [
+    176,
+    183
+   ],
+   "en_book": [
+    172,
+    177
+   ]
+  },
+  {
+   "id": "Q",
+   "unit": 8,
+   "nl_book": [
+    184,
+    191
+   ],
+   "en_book": [
+    178,
+    184
+   ]
+  },
+  {
+   "id": "R",
+   "unit": 8,
+   "nl_book": [
+    192,
+    201
+   ],
+   "en_book": [
+    185,
+    194
+   ],
+   "equivalence": "loose"
+  },
+  {
+   "id": "S",
+   "unit": 8,
+   "nl_book": [
+    202,
+    218
+   ],
+   "en_book": [
+    195,
+    212
+   ]
+  },
+  {
+   "id": "T",
+   "unit": 10,
+   "nl_book": [
+    242,
+    251
+   ],
+   "en_book": [
+    230,
+    240
+   ]
+  },
+  {
+   "id": "U",
+   "unit": 10,
+   "nl_book": [
+    252,
+    258
+   ],
+   "en_book": [
+    241,
+    247
+   ]
+  },
+  {
+   "id": "V",
+   "unit": 11,
+   "nl_book": [
+    259,
+    273
+   ],
+   "en_book": [
+    248,
+    258
+   ]
+  },
+  {
+   "id": "W",
+   "unit": 11,
+   "nl_book": [
+    274,
+    284
+   ],
+   "en_book": [
+    259,
+    268
+   ]
+  }
+ ],
+ "sentences": [
+  3,
+  5,
+  6,
+  10,
+  11
+ ]
+}

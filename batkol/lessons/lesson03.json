@@ -1,0 +1,386 @@
+{
+ "comment": "Book-token ranges only (no book text). Glosses are literal English written for the drill. Long items (> 12 words or > 4.5 s) are split into parts at checked in-speech cuts; parts are drilled with cues, the whole clause is built up from them and recalled repeat-only.",
+ "lesson": "lesson03",
+ "day": 3,
+ "chapter": "ch01",
+ "minutes": 30,
+ "resplit": {
+  "I": [
+   {
+    "nl_book": [
+     102,
+     106
+    ],
+    "en_book": [
+     97,
+     101
+    ],
+    "gloss": "which came in very handy"
+   },
+   {
+    "nl_book": [
+     107,
+     113
+    ],
+    "en_book": [
+     102,
+     113
+    ],
+    "gloss": "because she often peered over the fence"
+   },
+   {
+    "nl_book": [
+     114,
+     118
+    ],
+    "en_book": [
+     114,
+     117
+    ],
+    "gloss": "to spy on the neighbours"
+   }
+  ],
+  "K": [
+   {
+    "nl_book": [
+     125,
+     128
+    ],
+    "gloss": "and they knew for sure"
+   },
+   {
+    "nl_book": [
+     129,
+     137
+    ],
+    "gloss": "that there had never been such a fantastic baby"
+   }
+  ]
+ },
+ "items": [
+  {
+   "id": "X1",
+   "unit": 1,
+   "nl_book": [
+    27,
+    53
+   ],
+   "backfill": true,
+   "parts": [
+    {
+     "nl_book": [
+      27,
+      33
+     ],
+     "gloss": "And if there had ever been people"
+    },
+    {
+     "nl_book": [
+      34,
+      38
+     ],
+     "gloss": "of whom you would think"
+    },
+    {
+     "nl_book": [
+      39,
+      49
+     ],
+     "gloss": "that they would never get involved in anything strange or mysterious"
+    },
+    {
+     "nl_book": [
+      50,
+      53
+     ],
+     "gloss": "it was them."
+    }
+   ]
+  },
+  {
+   "id": "N",
+   "unit": 6,
+   "nl_book": [
+    152,
+    161
+   ],
+   "en_book": [
+    148,
+    157
+   ]
+  },
+  {
+   "id": "O",
+   "unit": 7,
+   "nl_book": [
+    162,
+    175
+   ],
+   "parts": [
+    {
+     "nl_book": [
+      162,
+      169
+     ],
+     "en_book": [
+      158,
+      164
+     ],
+     "gloss": "they would sink through the floor with shame"
+    },
+    {
+     "nl_book": [
+      170,
+      175
+     ],
+     "en_book": [
+      165,
+      171
+     ],
+     "gloss": "if anyone heard about the Potters"
+    }
+   ]
+  },
+  {
+   "id": "P",
+   "unit": 8,
+   "nl_book": [
+    176,
+    183
+   ],
+   "en_book": [
+    172,
+    177
+   ]
+  },
+  {
+   "id": "Q",
+   "unit": 8,
+   "nl_book": [
+    184,
+    191
+   ],
+   "en_book": [
+    178,
+    184
+   ]
+  },
+  {
+   "id": "R",
+   "unit": 8,
+   "nl_book": [
+    192,
+    201
+   ],
+   "en_book": [
+    185,
+    194
+   ],
+   "equivalence": "loose"
+  },
+  {
+   "id": "S",
+   "unit": 8,
+   "nl_book": [
+    202,
+    218
+   ],
+   "parts": [
+    {
+     "nl_book": [
+      202,
+      210
+     ],
+     "en_book": [
+      195,
+      203
+     ],
+     "gloss": "because her sister and that good-for-nothing husband of hers"
+    },
+    {
+     "nl_book": [
+      211,
+      218
+     ],
+     "en_book": [
+      204,
+      212
+     ],
+     "gloss": "were as un-Dursleyish as could be"
+    }
+   ]
+  },
+  {
+   "id": "U9",
+   "unit": 9,
+   "nl_book": [
+    219,
+    241
+   ],
+   "parts": [
+    {
+     "nl_book": [
+      219,
+      227
+     ],
+     "gloss": "At the thought of what the neighbours would say"
+    },
+    {
+     "nl_book": [
+      228,
+      234
+     ],
+     "gloss": "if the Potters ever came to visit"
+    },
+    {
+     "nl_book": [
+      235,
+      241
+     ],
+     "gloss": "the Dursleys clenched their buttocks"
+    }
+   ]
+  },
+  {
+   "id": "T",
+   "unit": 10,
+   "nl_book": [
+    242,
+    251
+   ],
+   "en_book": [
+    230,
+    240
+   ]
+  },
+  {
+   "id": "U",
+   "unit": 10,
+   "nl_book": [
+    252,
+    258
+   ],
+   "en_book": [
+    241,
+    247
+   ]
+  },
+  {
+   "id": "V",
+   "unit": 11,
+   "nl_book": [
+    259,
+    273
+   ],
+   "parts": [
+    {
+     "nl_book": [
+      259,
+      265
+     ],
+     "en_book": [
+      248,
+      253
+     ],
+     "gloss": "that little son was even an extra reason"
+    },
+    {
+     "nl_book": [
+      266,
+      273
+     ],
+     "en_book": [
+      254,
+      258
+     ],
+     "gloss": "to keep the Potters out of the house"
+    }
+   ]
+  },
+  {
+   "id": "W",
+   "unit": 11,
+   "nl_book": [
+    274,
+    284
+   ],
+   "en_book": [
+    259,
+    268
+   ]
+  },
+  {
+   "id": "U12",
+   "unit": 12,
+   "nl_book": [
+    285,
+    327
+   ],
+   "parts": [
+    {
+     "nl_book": [
+      285,
+      291
+     ],
+     "en_book": [
+      269,
+      275
+     ],
+     "gloss": "When Mr and Mrs Dursley woke up"
+    },
+    {
+     "nl_book": [
+      292,
+      300
+     ],
+     "en_book": [
+      276,
+      283
+     ],
+     "gloss": "on the dull grey Tuesday on which our story begins"
+    },
+    {
+     "nl_book": [
+      301,
+      309
+     ],
+     "gloss": "you would, on seeing the cloudy sky,"
+    },
+    {
+     "nl_book": [
+      310,
+      316
+     ],
+     "gloss": "absolutely not have said that that day"
+    },
+    {
+     "nl_book": [
+      317,
+      320
+     ],
+     "en_book": [
+      303,
+      306
+     ],
+     "gloss": "all over the country"
+    },
+    {
+     "nl_book": [
+      321,
+      327
+     ],
+     "en_book": [
+      294,
+      302
+     ],
+     "gloss": "strange and mysterious things would happen"
+    }
+   ]
+  }
+ ],
+ "sentences": [
+  6,
+  10,
+  11
+ ]
+}
