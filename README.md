@@ -92,10 +92,7 @@ Open the repo in Claude Code and ask in plain words, for example:
 `CLAUDE.md` is the agent's manual: where things live, the commands, and the working rules.
 `docs/` holds the design notes, with measured numbers.
 
-Today, quality is checked by ear, not by code review. Each lesson comes with a short listening
-list of its riskiest cuts. Your pass/fail verdicts are stored, and a failed clip is never used
-again. That is the current behavior, not a fixed rule: like the rest of Batkol, it can be
-changed, for example to add automatic checks.
+Today, quality is checked by ear, but automated quality checks can be requested from the agent.
 
 Requirements: Linux or Windows with WSL2 (x86_64), CPU only, 16 GB RAM, uv and ffmpeg, plus
 rclone if your inputs live on Google Drive.
