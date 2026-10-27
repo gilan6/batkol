@@ -1,0 +1,179 @@
+{
+ "comment": "Items as book-token ranges (nl_book / en_book: first,last index into the chapter's spoken tokens); no book text.",
+ "chapter": "ch01",
+ "minutes": 15,
+ "items": [
+  {
+   "id": "A",
+   "unit": 0,
+   "nl_book": [
+    0,
+    6
+   ],
+   "en_book": [
+    0,
+    5
+   ]
+  },
+  {
+   "id": "B",
+   "unit": 1,
+   "nl_book": [
+    7,
+    17
+   ],
+   "en_book": [
+    6,
+    14
+   ]
+  },
+  {
+   "id": "C",
+   "unit": 1,
+   "nl_book": [
+    18,
+    26
+   ],
+   "en_book": [
+    15,
+    23
+   ]
+  },
+  {
+   "id": "D",
+   "unit": 1,
+   "nl_book": [
+    54,
+    62
+   ],
+   "en_book": [
+    43,
+    50
+   ]
+  },
+  {
+   "id": "E",
+   "unit": 2,
+   "nl_book": [
+    63,
+    70
+   ],
+   "en_book": [
+    51,
+    63
+   ]
+  },
+  {
+   "id": "F",
+   "unit": 3,
+   "nl_book": [
+    71,
+    80
+   ],
+   "en_book": [
+    64,
+    73
+   ]
+  },
+  {
+   "id": "G",
+   "unit": 3,
+   "nl_book": [
+    81,
+    85
+   ],
+   "en_book": [
+    74,
+    81
+   ]
+  },
+  {
+   "id": "H",
+   "unit": 4,
+   "nl_book": [
+    86,
+    101
+   ],
+   "en_book": [
+    82,
+    96
+   ]
+  },
+  {
+   "id": "I",
+   "unit": 4,
+   "nl_book": [
+    102,
+    118
+   ],
+   "en_book": [
+    97,
+    117
+   ]
+  },
+  {
+   "id": "J",
+   "unit": 5,
+   "nl_book": [
+    119,
+    124
+   ],
+   "en_book": [
+    118,
+    125
+   ]
+  },
+  {
+   "id": "K",
+   "unit": 5,
+   "nl_book": [
+    125,
+    137
+   ],
+   "en_book": [
+    126,
+    135
+   ]
+  },
+  {
+   "id": "L",
+   "unit": 6,
+   "nl_book": [
+    138,
+    145
+   ],
+   "en_book": [
+    136,
+    141
+   ]
+  },
+  {
+   "id": "M",
+   "unit": 6,
+   "nl_book": [
+    146,
+    151
+   ],
+   "en_book": [
+    142,
+    147
+   ]
+  },
+  {
+   "id": "N",
+   "unit": 6,
+   "nl_book": [
+    152,
+    161
+   ],
+   "en_book": [
+    148,
+    157
+   ]
+  }
+ ],
+ "sentences": [
+  3,
+  6
+ ]
+}
