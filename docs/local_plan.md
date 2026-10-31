@@ -5,10 +5,10 @@ No book text in this file. Facts are observed in the repo, the docs or earlier s
 
 ## 1. What the project does now
 
-| Product | Code | State (2026-10-24) |
+| Product | Code | State (2026-10-31) |
 |---|---|---|
-| (a) NL→EN→NL chapter drill: per unit, NL clip, 1 s, EN clip, 1 s, NL clip, 1 s | `drill.py` (index-only); `pipeline.py` is the legacy HP1 builder | HP1 ch. 1 v3 and HP2 ch. 1 (56.4 min, 121 units) are on Drive in `batkol-out/poc/` |
-| (b) Pimsleur-style lessons: frame + EN cue, pause, narrator, repeat; buildup; recalls; reviews from learner state | `lesson.py`, `learner.py`, `clipbank.py`, specs in `batkol/lessons/` | HP1 ch. 1, lessons 1–5 (units 1–17). Lesson 6 starts at U18; items U18–U24 are already in `lesson05.json` |
+| (a) NL→EN→NL chapter drill: per unit, NL clip, 1 s, EN clip, 1 s, NL clip, 1 s | `drill.py` (index-only); `pipeline.py` is the legacy HP1 builder | HP1 ch. 1 v3 in `batkol-out/HP/book1/`; HP2 ch. 1 (56.4 min, 121 units; user: good) and ch. 2 (65.6 min, 136 units, leveled) in `batkol-out/HP/book2/` |
+| (b) Pimsleur-style lessons: frame + EN cue, pause, narrator, repeat; buildup; recalls; reviews from learner state | `lesson.py`, `learner.py`, `clipbank.py`, specs in `batkol/lessons/` | HP1 ch. 1, lessons 1–7 (units 1–27; 6 and 7 leveled). Lesson 8 starts at U28a; `lesson06.json` holds U28a–U30a as untaught candidates |
 
 Shared flow (`docs/flow_v2.md`): **analyze** (whisper large-v3-turbo int8 + MMS_FA CTC + gap pass)
 → **edition** check → **index** → plan, cut and render with no ASR.
@@ -17,7 +17,8 @@ Shared flow (`docs/flow_v2.md`): **analyze** (whisper large-v3-turbo int8 + MMS_
 - Data: Drive through rclone.
   - Inputs: `gdrive:batkol/` (read-only).
   - State: `gdrive:batkol-out/state/` (63 MB).
-  - Outputs: `gdrive:batkol-out/poc/`.
+  - Outputs: `gdrive:batkol-out/HP/` and `gdrive:batkol-out/50l/`: audio-only folders, metadata in their
+    `meta/` (`scripts/publish.sh`).
 - None of it needs a GPU. Every model runs on CPU (`device="cpu"` everywhere).
 
 ### Git state
@@ -28,12 +29,14 @@ Shared flow (`docs/flow_v2.md`): **analyze** (whisper large-v3-turbo int8 + MMS_
 
 ### Open work carried over
 
-From `docs/flow_v2.md` §4 and `docs/book2_ch01.md`:
-1. Lesson 2 listening list: 18 clips pending. HP2 drill: not listened to.
-2. Lesson 6 onward (HP1 ch. 1 from U18).
+From `docs/flow_v2.md` §4, `docs/book2_ch01.md` and `docs/book2_ch02.md` (updated 2026-10-31):
+1. Listening lists of lessons 2–7: 114 clips pending (lesson 1: 11 of 11 passed). HP2 ch. 1 drill:
+   good (user, 2026-10-31); ch. 2: not listened to.
+2. Lesson 8 onward (HP1 ch. 1 from U28a).
 3. Port the HP1 ch. 1 drill to the index; remove per-clip verification from `pipeline.py`.
 4. NL narrator additions right before a sentence. Stopped after two failed fixes. Next test: gap plus the first 1–2 s of speech.
-5. More chapters, which need a registry entry each in `sources_local.py`.
+5. More chapters, which need a registry entry each in `sources_local.py` (book 2: one helper builds
+   them). A book's last chapter is not supported yet: it has no next heading.
 
 ## 2. What changes on the laptop, and why it helps
 
@@ -225,5 +228,5 @@ Disk breakdown (sizes *(assumed)* unless stated):
 
 1. §4 setup and the verification gate. Then commit the CPU lock.
 2. §5 repo changes (`CLAUDE.md` is already updated for the laptop).
-3. Carried-over listening (lesson 2, HP2 drill). Their verdicts gate the cut rules that 50L reuses.
-4. F0–F3 (50languages), in parallel with HP lessons 6+ and new chapter drills, which are now overnight batch jobs.
+3. Carried-over listening (lesson lists 2–7, HP2 ch. 2). Their verdicts gate the cut rules that 50L reuses.
+4. F0–F3 (50languages), in parallel with HP lessons 8+ and new chapter drills, which are now overnight batch jobs.

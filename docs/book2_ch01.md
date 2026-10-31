@@ -37,8 +37,7 @@ uv run python -m batkol.analyze b2ch01 en               # whisper, emissions, al
 uv run python -m batkol.edition b2ch01 en
 uv run python -m batkol.analyze b2ch01 en               # book match, index
 uv run python -m batkol.drill b2ch01                    # ~/work/b2ch01/drill/hp2_ch01.{mp3,tsv}, _report.md
-rclone copy ~/work/b2ch01/drill gdrive:batkol-out/poc/b2ch01/ --include "*.{mp3,tsv,md}"
-rclone copy ~/work/b2ch01 gdrive:batkol-out/poc/b2ch01/ --include "edition_*.md"
+bash scripts/publish.sh HP/book2 HP/meta/book2/b2ch01 ~/work/b2ch01/drill/*.{mp3,tsv,md} ~/work/b2ch01/edition_*.md
 bash scripts/backup_state.sh
 ```
 
@@ -158,7 +157,7 @@ An unexplained difference must be fixed before HP2.
   - NL: ok 95.8 %, match 98.1 %, 1 run, 9 intro tokens (spoken credits) → `book`.
   - EN: ok 96.4 %, match 96.9 %, 2 runs → `book` (en_b2_a; en_b2_b within 0.1 pt).
 - **Indexes.** NL 2750 words (316 pause boundaries), EN 2520 words (474 pause boundaries).
-- **Drill** (`gdrive:batkol-out/poc/b2ch01/hp2_ch01.{mp3,tsv}`, report, edition reports): 56.4 min,
+- **Drill** (`gdrive:batkol-out/HP/book2/hp2_ch01.mp3`; TSV and reports in `HP/meta/book2/b2ch01/`): 56.4 min,
   121 units from 173 sentence groups. Merges: nl_no_pause ×30, en_no_pause ×12, en_edge_score ×13,
   nl_edge_score ×1. NL coverage 100 %. No unpaired sentences. 11 units with index risks.
   - The one `cut_in_speech` flag is unit 0's EN start: the first word sits at the file edge, so the

@@ -39,9 +39,12 @@ Setup, verification and open decisions: `docs/local_plan.md`.
 | Code, docs, lesson specs (book-token ranges, no text) | this repo | yes |
 | Inputs: audiobooks, EPUBs, Pimsleur | `gdrive:batkol/` (read-only); paths in `batkol/sources_local.py` (git-ignored; template `sources_local.example.py`) | never |
 | State: indexes, stage caches, clip bank, repaired text | `~/work` (laptop), backed up to `gdrive:batkol-out/state/` | never |
-| Outputs for listening: MP3, TSV, reports | `gdrive:batkol-out/poc/` | never |
+| Audio for listening (audio files only) | `gdrive:batkol-out/HP/{lessons,book1,book2}/`, `gdrive:batkol-out/50l/lessons/` | never |
+| Their metadata: sidecar JSON, TSV, reports, READMEs | `gdrive:batkol-out/HP/meta/` and `50l/meta/`, one folder per lesson or chapter | never |
 
 - **No book text, audio or transcripts in git.** Write to Drive only inside `gdrive:batkol-out/`.
+- Put outputs on Drive with `bash scripts/publish.sh AUDIO_DIR META_DIR FILE...`: audio files go to
+  AUDIO_DIR, every other file to META_DIR, so the audio folders never hold anything else.
 - After any costly step (audio pass, model pass, lesson build, verdicts), run `bash scripts/backup_state.sh`.
   It saves every costly byproduct to `gdrive:batkol-out/state/` (a user-approved target). The laptop
   disk is the only live copy, so this is the off-site backup. Never recompute what is already in `~/work`.
@@ -79,11 +82,13 @@ uv run python -m batkol.analyze b2ch02 nl --asr-only    # whisper (~14 min for a
 uv run python -m batkol.edition b2ch02 nl               # audiobook vs EPUB(s): picks the text, decides book|reconcile|stop
 uv run python -m batkol.analyze b2ch02 nl               # emissions + alignment + gap pass + index (same for en)
 uv run python -m batkol.drill b2ch02                    # leveled drill MP3/TSV/report from the indexes (~5 min, no ASR)
+bash scripts/publish.sh HP/book2 HP/meta/book2/b2ch02 ~/work/b2ch02/drill/*.{mp3,tsv,md} ~/work/b2ch02/edition_*.md
 uv run python -m batkol.index nl_ch01 en_ch01 pims_L01                 # (re)build indexes from caches (seconds)
 uv run python -m batkol.lesson view 7 12                                # pause chunks + book ranges for item selection
 # batkol/lessons/ch01_plan.json: DRAFT items for all of ch. 1 (A-W hand-picked; u012.* automatic and
 # unreviewed). Review a lesson's share before using it (batkol/plan.py; LaBSE vectors cached on Drive).
 uv run python -m batkol.lesson batkol/lessons/lesson03.json ~/work/lesson03  # build a lesson (records learner state)
+bash scripts/publish.sh HP/lessons HP/meta/lessons/lesson03 ~/work/lesson03/*  # after writing its README.md there
 # Long items (> 12 words / 4.5 s speech) need "parts" in the spec: book ranges cut where ok_cut allows,
 # each with "en_book" (audiobook cue) and/or "gloss" (Piper). Report field "uncovered" must stay empty.
 uv run python -m batkol.validate_index all                             # index vs re-transcription history
