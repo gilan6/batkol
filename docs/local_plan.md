@@ -129,6 +129,10 @@ Disk breakdown (sizes *(assumed)* unless stated):
 2. **Thread count from an env var** (`BATKOL_THREADS`, default 4) in `asr.py` and `align.py`. Then
    re-time the slice with the laptop's real core count. Physical cores, not threads, usually win for
    CTranslate2 *(assumed)*.
+   - Done 2026-10-31. Slice of HP2 ch. 2 NL with `BATKOL_THREADS=6` (the 6 physical cores): whisper
+     rtf 0.78, emissions rtf 0.37, models loaded in 52 s (4 threads, §4 step 6: 0.85 and 0.46).
+     A 21-min chapter is then ~16 min whisper + ~8 min emissions: `analyze --asr-only` splits the
+     pass in two, so each step stays under 25 min. 12 threads not tried.
 3. **Chapter registry:** generate `sources_local.py` entries for the remaining chapters (globs, as for
    HP2), so whole books can be queued.
 

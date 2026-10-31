@@ -2,8 +2,9 @@
 
   python -m batkol.edition <chapter> nl|en
 
-Needs <lang>_asr.jsonl (`batkol.analyze`). Candidates: chapter 1 of every EPUB
-the registry found for the chapter (`batkol.sources`), plus the chapter text
+Needs <lang>_asr.jsonl (`batkol.analyze`). Candidates: the chapter (its number
+ends the chapter id) cut from every EPUB the registry found for it
+(`batkol.sources`), plus the chapter text
 already in ~/work/text (e.g. the repaired HP1 text), which is never overwritten.
 Book tokens are diffed against the spoken tokens: shares of the book tokens
 (ok, fuzzy = spelling, differs, unheard), spoken tokens not in the book
@@ -30,7 +31,7 @@ from rapidfuzz import fuzz
 
 from . import sources
 from .align import spoken_tokens
-from .chapter import chapter1
+from .chapter import chapter_paras
 from .index import FUZZY
 from .sentences import chapter_sentences
 
@@ -129,7 +130,7 @@ def main(chapter, lang):
         cands["current"] = (text.read_text().splitlines(), str(text))
     for name, e in src["epubs"].items():
         try:
-            cands[name] = (chapter1(e["local"]), e["drive"])
+            cands[name] = (chapter_paras(e["local"], sources.number(chapter)), e["drive"])
         except SystemExit as err:
             print(f"[edition] {name}: {err}")
     tmp = run / f"edition_{lang}.tmp.txt"

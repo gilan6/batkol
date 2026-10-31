@@ -70,13 +70,15 @@ See `docs/flow_v2.md` for the reasons, with data, and the status.
 ## Commands
 
 ```bash
-# A new chapter, NL -> EN -> NL drill (docs/book2_ch01.md): one audio pass per source, then cutting only
-uv run python -m batkol.sources fetch b2ch01            # resolve Drive globs, download audio + EPUBs
-uv run python -m batkol.analyze b2ch01 nl --slice 60    # time a slice first (working rule)
-uv run python -m batkol.analyze b2ch01 nl               # whisper + emissions; stops for the text check
-uv run python -m batkol.edition b2ch01 nl               # audiobook vs EPUB(s): picks the text, decides book|reconcile|stop
-uv run python -m batkol.analyze b2ch01 nl               # alignment + gap pass + index (same for en)
-uv run python -m batkol.drill b2ch01                    # drill MP3/TSV/report from the indexes (~1 min, no ASR)
+# A new chapter, NL -> EN -> NL drill (docs/book2_ch01.md, docs/book2_ch02.md): one audio pass per source,
+# then cutting only. Register it in batkol/sources_local.py; the id's ch<number> picks the EPUB chapter.
+# Laptop: BATKOL_THREADS=6, and each run appended to ~/work/logs/<chapter>.log (live bars: tail -f).
+uv run python -m batkol.sources fetch b2ch02            # resolve Drive paths, download audio + EPUBs
+uv run python -m batkol.analyze b2ch02 nl --slice 60    # time a slice first (working rule)
+uv run python -m batkol.analyze b2ch02 nl --asr-only    # whisper (~14 min for a 21-min chapter)
+uv run python -m batkol.edition b2ch02 nl               # audiobook vs EPUB(s): picks the text, decides book|reconcile|stop
+uv run python -m batkol.analyze b2ch02 nl               # emissions + alignment + gap pass + index (same for en)
+uv run python -m batkol.drill b2ch02                    # leveled drill MP3/TSV/report from the indexes (~5 min, no ASR)
 uv run python -m batkol.index nl_ch01 en_ch01 pims_L01                 # (re)build indexes from caches (seconds)
 uv run python -m batkol.lesson view 7 12                                # pause chunks + book ranges for item selection
 # batkol/lessons/ch01_plan.json: DRAFT items for all of ch. 1 (A-W hand-picked; u012.* automatic and

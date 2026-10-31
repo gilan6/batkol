@@ -2,6 +2,9 @@
 
   python -m batkol.analyze <chapter> nl|en             # resumable: rerun to continue
   python -m batkol.analyze <chapter> nl|en --slice 60  # time a 60 s slice first (writes no cache)
+  python -m batkol.analyze <chapter> nl|en --asr-only  # stop after whisper: splits a pass that would run
+                                                       # over 25 min (laptop: ~21 min chapters)
+Threads: BATKOL_THREADS (default 4). Progress bars go to stderr; log the run and tail -f it.
 
 Stages, cached in ~/work/<chapter>/ and skipped when present:
   <lang>_asr.jsonl     whisper long-form, 5-min windows (resumable)
@@ -113,6 +116,7 @@ def main():
     ap.add_argument("chapter")
     ap.add_argument("lang", choices=["nl", "en"])
     ap.add_argument("--slice", type=float, help="time this many seconds of audio, write nothing")
+    ap.add_argument("--asr-only", action="store_true", help="stop after the whisper pass")
     a = ap.parse_args()
     src = sources.load(a.chapter)[a.lang]
     run = WORK / a.chapter
@@ -124,6 +128,8 @@ def main():
         return time_slice(x, a.lang, a.slice)
     words = asr.transcribe_long(x, a.lang, run / f"{a.lang}_asr.jsonl")
     print(f"[asr] {len(words)} words", flush=True)
+    if a.asr_only:
+        return
     em = emissions(x, run / f"{a.lang}_emission.npy")
     text = Path(src["text"])
     if a.lang == "nl":

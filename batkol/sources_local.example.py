@@ -5,7 +5,9 @@ Paths are relative to the rclone remote `gdrive:`. Each language has:
   cut    optional: for a whole-book file, the chapter title to cut at its chapter marks
   text   where the chapter text is written, under ~/work
   epubs  {name: path} of one or more editions, or (folder, glob); batkol.edition picks the text
-Index keys are <lang>_<chapter>, e.g. nl_ch01, en_b2ch01.
+Index keys are <lang>_<chapter>, e.g. nl_ch01, en_b2ch01. A chapter id ends in ch<number>: the
+chapter batkol.edition cuts from the EPUBs (b2ch02: chapter 2). Entries are plain Python, so a book
+can be one helper called per chapter.
 """
 NL = "batkol/<target-language audiobook folder>"
 EN = "batkol/<native-language audiobook folder>"

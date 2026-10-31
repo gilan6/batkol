@@ -1,22 +1,26 @@
 """CTC forced alignment with torchaudio MMS_FA (multilingual, romanized a-z ')."""
+import os
+
 import numpy as np
 import torch
 import torchaudio
 import torchaudio.functional as F
 from num2words import num2words
 
+from . import progress
 from .audio import SR
 from .textnorm import words
 
 FRAME = 320  # samples per emission frame (20 ms at 16 kHz)
 BUNDLE = torchaudio.pipelines.MMS_FA
+THREADS = int(os.environ.get("BATKOL_THREADS", 4))  # CPU threads, as in asr.py
 _model = None
 
 
 def model():
     global _model
     if _model is None:
-        torch.set_num_threads(4)
+        torch.set_num_threads(THREADS)
         _model = BUNDLE.get_model(with_star=True).eval()
     return _model
 
@@ -36,6 +40,7 @@ def emissions(audio, chunk_s=30, ctx_s=2):
     """Frame log-probs for long audio: 30 s chunks with 2 s context each side."""
     hop, pad = chunk_s * SR, ctx_s * SR  # both multiples of FRAME
     out = []
+    pb = progress.bar("emissions", len(audio) / SR)
     with torch.inference_mode():
         for s in range(0, len(audio), hop):
             a0, a1 = max(0, s - pad), min(len(audio), s + hop + pad)
@@ -43,6 +48,8 @@ def emissions(audio, chunk_s=30, ctx_s=2):
             em, _ = model()(x)
             k0 = (s - a0) // FRAME
             out.append(em[0, k0:k0 + (min(s + hop, len(audio)) - s) // FRAME])
+            progress.to(pb, min(s + hop, len(audio)) / SR)
+    pb.close()
     return torch.cat(out)
 
 
