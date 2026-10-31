@@ -173,8 +173,17 @@ The CTC score filter (≥ 0.5) does separate real gap words from hallucinations:
 - **Long material without a safe split** (H) and long sentence drills are recalled repeat-only.
 - **Lessons 4 and 5: done.** Lesson 4 covers units 9–12 (30.9 min; `tolerance_min` 2.5 lets unit 12, the end
   of the paragraph, in). Lesson 5 covers units 13–17 (27.6 min).
-- **Lesson 6 continues at U18 (unit 18).** Items U18–U24 are already specified in
-  `batkol/lessons/lesson05.json`.
+- **Lessons 6 and 7: done**, leveled like the README examples (`build.match_loudness`): -18.5 LUFS whole
+  file, per-voice medians within 2 dB (lesson 5, built before the leveling: -20.3 LUFS).
+  - Lesson 6 covers units 18–24 (27.9 min).
+  - Lesson 7 covers units 25–27 (30.9 min). At 30 min it stopped after U27a and left the rest of unit 27 in
+    `uncovered`, so its candidates end at U27b and `tolerance_min` 2.5 lets it in.
+- **Lesson 8 continues at U28a (unit 28).** Items U28a–U33b (to the end of the paragraph) are specified in
+  `batkol/lessons/lesson08.json`; a dry run resolves all of them with nothing dropped. Not built yet.
+  - U30b is two sentences joined by a narrator's added "ja" after a breath. There is no clean cut between
+    them, so it is taught whole, like H.
+- **Gloss-only items** (no audiobook line, like U16) keep their gloss in the learner state, so later lessons
+  can review them.
 - Clause items inside one sentence are separated by cuts inside speech, so they are **parts** of a long
   item; only parts may have planned in-speech cuts.
 - Narrator additions at an item's edge, with no pause between, are included in the item (`Sources.nl_range`).
