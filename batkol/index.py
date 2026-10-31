@@ -31,7 +31,7 @@ import numpy as np
 import torch
 from rapidfuzz import fuzz
 
-from . import align, cuts, sources
+from . import align, cuts, progress, sources
 from .audio import SR, cached
 from .sentences import chapter_sentences
 
@@ -154,7 +154,7 @@ def gapfill(lang, words, bounds, x, em, cache_path, min_gap=0.4, min_speech=0.08
     if cur:
         batches.append(cur)
     sec = align.FRAME / SR
-    t0 = time.time()
+    pb = progress.bar(f"gapfill {lang}", sum(z - a + sep_s for b in batches for a, z in b), disable=not batches)
     with open(cache_path, "a") as f:
         for bi, batch in enumerate(batches):
             parts, offsets, t = [], [], 0.0
@@ -163,7 +163,9 @@ def gapfill(lang, words, bounds, x, em, cache_path, min_gap=0.4, min_speech=0.08
                 offsets.append((t, t + len(seg) / SR))
                 parts += [seg, np.zeros(int(sep_s * SR), np.float32)]
                 t += len(seg) / SR + sep_s
-            hyp = asr.transcribe(np.concatenate(parts), lang)
+            base = pb.n
+            pb.set_description(f"gapfill {lang} window {bi + 1}/{len(batches)}", refresh=False)
+            hyp = asr.transcribe(np.concatenate(parts), lang, on_segment=lambda e: progress.to(pb, base + e))
             per = [[] for _ in batch]
             for w in hyp:
                 m = (w["s"] + w["e"]) / 2
@@ -182,7 +184,8 @@ def gapfill(lang, words, bounds, x, em, cache_path, min_gap=0.4, min_speech=0.08
                 f.write(json.dumps(dict(gap=[a, z], toks=res, raw=" ".join(w["w"] for w in ws)), ensure_ascii=False) + "\n")
                 done[f"{a:.3f}-{z:.3f}"] = res
             f.flush()
-            print(f"  gapfill {lang}: window {bi + 1}/{len(batches)} ({len(batch)} gaps), {time.time() - t0:.0f} s", flush=True)
+            progress.to(pb, base + t)
+    pb.close()
     kept = [tk for res in done.values() for tk in res if tk["score"] >= min_score]
     print(f"  gapfill {lang}: {len(todo)} gaps transcribed now in {len(batches)} windows, {len(done)} cached, "
           f"{len(kept)} words kept", flush=True)

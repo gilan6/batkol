@@ -1,6 +1,7 @@
 """Where each chapter's inputs live on Drive and where they land in ~/work.
 
 One entry per chapter id; index keys are <lang>_<chapter> (nl_ch01, en_b2ch01).
+An id ends in ch<number>: the chapter `batkol.edition` cuts from the EPUBs.
 A Drive path given as (folder, rclone glob; a leading ** reaches any depth) is
 resolved once by `fetch` (rclone, case-insensitive): audio must match exactly
 one file; an EPUB glob may match several editions, all kept as candidates for
@@ -11,6 +12,7 @@ one file; an EPUB glob may match several editions, all kept as candidates for
   python -m batkol.sources show b2ch01
 """
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -25,6 +27,14 @@ try:
     from .sources_local import CHAPTERS, PIMS_L01
 except ImportError:
     CHAPTERS, PIMS_L01 = {}, None
+
+
+def number(chapter):
+    """Chapter number from the id: ch01 -> 1, b2ch02 -> 2."""
+    m = re.search(r"ch(\d+)$", chapter)
+    if not m:
+        raise SystemExit(f"{chapter}: a chapter id ends in ch<number> (ch01, b2ch02)")
+    return int(m.group(1))
 
 
 def rclone_find(folder, glob):

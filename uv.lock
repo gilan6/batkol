@@ -78,6 +78,7 @@ dependencies = [
     { name = "sentence-transformers" },
     { name = "torch" },
     { name = "torchaudio" },
+    { name = "tqdm" },
 ]
 
 [package.metadata]
@@ -94,6 +95,7 @@ requires-dist = [
     { name = "sentence-transformers", specifier = ">=3.0" },
     { name = "torch", specifier = ">=2.4", index = "https://download.pytorch.org/whl/cpu" },
     { name = "torchaudio", specifier = ">=2.4", index = "https://download.pytorch.org/whl/cpu" },
+    { name = "tqdm", specifier = ">=4.66" },
 ]
 
 [[package]]

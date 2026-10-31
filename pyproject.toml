@@ -16,6 +16,7 @@ dependencies = [
     "num2words>=0.5.13",
     "piper-tts>=1.8.0",
     "scipy>=1.11",
+    "tqdm>=4.66",
 ]
 
 [tool.uv]
