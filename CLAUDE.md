@@ -101,4 +101,6 @@ uv run python -m batkol.clipbank verdict2 ~/work/bank/spans.jsonl <span_id> pass
 - If the same fix fails twice on the same symptom: stop and report what fails, what is
   ruled out, and the cheapest next test.
 - No Dutch TTS. English TTS (Piper, free, offline) only as a fallback. No paid APIs.
+- Lessons: prepare lesson n only. Have everything lesson n+1 needs from lesson n ready (where it starts,
+  what building n found), but write no specs or checks for it.
 - Push back when you disagree; stick to the ground truth.

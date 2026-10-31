@@ -178,10 +178,9 @@ The CTC score filter (≥ 0.5) does separate real gap words from hallucinations:
   - Lesson 6 covers units 18–24 (27.9 min).
   - Lesson 7 covers units 25–27 (30.9 min). At 30 min it stopped after U27a and left the rest of unit 27 in
     `uncovered`, so its candidates end at U27b and `tolerance_min` 2.5 lets it in.
-- **Lesson 8 continues at U28a (unit 28).** Items U28a–U33b (to the end of the paragraph) are specified in
-  `batkol/lessons/lesson08.json`; a dry run resolves all of them with nothing dropped. Not built yet.
-  - U30b is two sentences joined by a narrator's added "ja" after a breath. There is no clean cut between
-    them, so it is taught whole, like H.
+- **Lesson 8 continues at U28a (unit 28).** `lesson06.json` already holds U28a–U30a as untaught candidates.
+  In unit 30, book 624–642 is two sentences joined by a narrator's added "ja" after a breath, with no clean
+  cut between them: teach it whole, like H.
 - **Gloss-only items** (no audiobook line, like U16) keep their gloss in the learner state, so later lessons
   can review them.
 - Clause items inside one sentence are separated by cuts inside speech, so they are **parts** of a long

@@ -1,5 +1,5 @@
 {
- "comment": "Book-token ranges only (no book text); glosses are literal English written for the drill (fallback where an audiobook cue is given; the only cue where the audiobook English says something else). Continues lesson06 in chapter order (unit 25 on). The candidates end at U27b and tolerance_min 2.5 lets it in: at 30 min the lesson stopped after U27a, leaving unit 27 half taught. The next lesson continues at U28a (lesson08.json).",
+ "comment": "Book-token ranges only (no book text); glosses are literal English written for the drill (fallback where an audiobook cue is given; the only cue where the audiobook English says something else). Continues lesson06 in chapter order (unit 25 on). The candidates end at U27b and tolerance_min 2.5 lets it in: at 30 min the lesson stopped after U27a, leaving unit 27 half taught. The next lesson continues at U28a.",
  "lesson": "lesson07",
  "day": 7,
  "chapter": "ch01",
