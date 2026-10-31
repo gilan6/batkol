@@ -222,7 +222,8 @@ def make_parts(src, item_id, unit, parts, a, b):
 def resolve_item(src, it):
     a, b = src.nl_range(*it["nl_book"])
     d = dict(id=it["id"], unit=it["unit"], nl=src.clip("nl", a, b), words=dict(nl=[a, b]),
-             book=dict(nl=it["nl_book"], en=it.get("en_book")), backfill=it.get("backfill", False))
+             book=dict(nl=it["nl_book"], en=it.get("en_book"), **({"gloss": it["gloss"]} if it.get("gloss") else {})),
+             backfill=it.get("backfill", False))
     if it.get("parts"):
         d["parts"], d["pieces"] = make_parts(src, it["id"], it["unit"], it["parts"], a, b)
         d["book"]["parts"] = it["parts"]
@@ -566,7 +567,8 @@ def resolve_reviews(src, learner, day, chapter, resplit=None):
             nl = src.clip("nl", a, b)
             r = dict(id=iid, unit=d["unit"], nl=nl, en=src.clip("en", c, e), pieces=[], long=is_long(nl))
         else:
-            r = resolve_item(src, dict(id=iid, unit=d["unit"], nl_book=d["nl_book"], en_book=d["en_book"]))
+            r = resolve_item(src, dict(id=iid, unit=d["unit"], nl_book=d["nl_book"], en_book=d["en_book"],
+                                       **({"gloss": d["gloss"]} if d.get("gloss") else {})))
             r["pieces"] = []
         r["key"] = key
         out.append(r)
@@ -578,7 +580,8 @@ def defs_of(chapter, things, kind):
     for t in things:
         bk = t.get("book", {})
         out[f"{chapter}:{t['id']}"] = dict(kind=kind, unit=t["unit"], nl_book=bk.get("nl"), en_book=bk.get("en"),
-                                           **({"parts": bk["parts"]} if bk.get("parts") else {}))
+                                           **({"parts": bk["parts"]} if bk.get("parts") else {}),
+                                           **({"gloss": bk["gloss"]} if bk.get("gloss") else {}))
     return out
 
 

@@ -1,0 +1,124 @@
+{
+ "comment": "Book-token ranges only (no book text); glosses are literal English written for the drill (fallback where an audiobook cue is given; the only cue where the audiobook English says something else). Continues lesson06 in chapter order (unit 25 on). The candidates end at U27b and tolerance_min 2.5 lets it in: at 30 min the lesson stopped after U27a, leaving unit 27 half taught. The next lesson continues at U28a (lesson08.json).",
+ "lesson": "lesson07",
+ "day": 7,
+ "chapter": "ch01",
+ "minutes": 30,
+ "tolerance_min": 2.5,
+ "items": [
+  {
+   "id": "U25a",
+   "unit": 25,
+   "nl_book": [
+    521,
+    531
+   ],
+   "en_book": [
+    514,
+    524
+   ],
+   "gloss": "now the animal was reading the sign with Privet Drive, or rather"
+  },
+  {
+   "id": "U25b",
+   "unit": 25,
+   "nl_book": [
+    532,
+    534
+   ],
+   "en_book": [
+    525,
+    528
+   ],
+   "gloss": "it was looking at it"
+  },
+  {
+   "id": "U25c",
+   "unit": 25,
+   "nl_book": [
+    535,
+    545
+   ],
+   "en_book": [
+    529,
+    534
+   ],
+   "gloss": "cats could not read, whether signs or maps"
+  },
+  {
+   "id": "U26",
+   "unit": 26,
+   "nl_book": [
+    546,
+    557
+   ],
+   "en_book": [
+    535,
+    549
+   ],
+   "gloss": "Mr Dursley shook his head and stopped thinking about the cat"
+  },
+  {
+   "id": "U27a",
+   "unit": 27,
+   "nl_book": [
+    558,
+    578
+   ],
+   "parts": [
+    {
+     "nl_book": [
+      558,
+      562
+     ],
+     "gloss": "on the way to his work"
+    },
+    {
+     "nl_book": [
+      563,
+      568
+     ],
+     "gloss": "he thought only about drills"
+    },
+    {
+     "nl_book": [
+      569,
+      578
+     ],
+     "gloss": "and the big order he hoped to land"
+    }
+   ]
+  },
+  {
+   "id": "U27b",
+   "unit": 27,
+   "nl_book": [
+    579,
+    591
+   ],
+   "parts": [
+    {
+     "nl_book": [
+      579,
+      585
+     ],
+     "en_book": [
+      572,
+      577
+     ],
+     "gloss": "but at the edge of the town"
+    },
+    {
+     "nl_book": [
+      586,
+      591
+     ],
+     "gloss": "those pleasant daydreams were rudely disturbed"
+    }
+   ]
+  }
+ ],
+ "sentences": [
+  25
+ ]
+}
