@@ -2,7 +2,7 @@
 # Save every costly byproduct of ~/work to Drive (user-approved target), so no
 # audio pass, model pass or verdict is ever recomputed or lost with the container.
 # Not saved (cheap or available elsewhere): 16 kHz decode caches (~20 s each), inputs
-# (gdrive:batkol), outputs (gdrive:batkol-out/poc), logs, models (re-downloaded from HF).
+# (gdrive:batkol), outputs (gdrive:batkol-out/HP, 50l), logs, models (re-downloaded from HF).
 set -euo pipefail
 cd "$HOME/work"
 rclone copy . gdrive:batkol-out/state/ \

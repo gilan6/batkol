@@ -5,8 +5,8 @@ Supersedes the "Status 2026-10-15" plan where marked. No book text in this file.
 ## 1. PoC goal
 
 One lesson (~15 min) from one passage of HP1 ch. 1 that runs every mechanism of the
-program end to end. Output on Drive in `gdrive:batkol-out/poc/lesson01/`: MP3 plus a
-sidecar JSON listing the source of every utterance.
+program end to end. Output on Drive in `gdrive:batkol-out/HP/lessons/`: MP3, plus a sidecar JSON
+listing the source of every utterance (in `HP/meta/lessons/lesson01/`).
 
 Done when all of these hold:
 - **Mechanisms:** passage played at the start and again at the end; anticipation;

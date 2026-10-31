@@ -2,7 +2,7 @@
 # Restore the working state of a new session. Data never lives in git:
 #   inputs  gdrive:batkol/        (read-only: audiobooks, EPUBs, Pimsleur)
 #   state   gdrive:batkol-out/state/  (indexes, stage caches, clip bank, repaired text, lesson data)
-#   outputs gdrive:batkol-out/poc/    (MP3/TSV/reports for listening)
+#   outputs gdrive:batkol-out/HP/, 50l/  (audio for listening; sidecars and reports in */meta/)
 # Usage: bash scripts/restore_state.sh [chapter ...]   (chapter ids from batkol/sources_local.py; default ch01)
 set -euo pipefail
 W="$HOME/work"

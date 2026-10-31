@@ -50,7 +50,8 @@ new leveling code was needed; the chapter 1 MP3 on Drive is the 2026-10-24 build
 
 ## Drill
 
-`gdrive:batkol-out/poc/b2ch02/`: `hp2_ch02.{mp3,tsv}`, the report and both edition reports.
+`gdrive:batkol-out/HP/book2/hp2_ch02.mp3`; the TSV, the report and both edition reports are in
+`gdrive:batkol-out/HP/meta/book2/b2ch02/`.
 
 - 65.6 min, 136 units from 237 sentence groups (built in 5 min, LaBSE pairing included). Merges:
   nl_no_pause ×39, en_no_pause ×31, en_edge_score ×33, nl_edge_score ×17.

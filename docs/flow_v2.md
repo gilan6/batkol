@@ -116,10 +116,10 @@ Keys: `nl_ch01`, `en_ch01`, `pims_L01`.
 
 - `gdrive:batkol-out/state/`: indexes, stage caches (alignment, ASR, emissions, gap passes),
   repaired text, clip banks, lesson data.
-- `gdrive:batkol-out/poc/`:
-  - ch. 1 NL→EN→NL drill v3 (MP3 / TSV / report);
-  - lesson 1 v1 (ASR-checked) in `lesson01/`;
-  - lesson 1 v2 (index-only) in `lesson01_v2/`, with its listening list.
+- `gdrive:batkol-out/HP/` (`poc/` until 2026-10-31): audio files only in `lessons/` (lessons and their
+  listening lists), `book1/` and `book2/` (chapter drills; `book1/hp1_ch01.mp3` is the ch. 1 drill v3);
+  sidecar JSON, TSV, reports and READMEs in `meta/`, one folder per lesson or chapter
+  (`scripts/publish.sh` keeps it that way). `archive/` keeps the PoC-era outputs as they were.
 
 ### Legacy
 
@@ -204,7 +204,7 @@ The CTC score filter (≥ 0.5) does separate real gap words from hallucinations:
      (3 leaks) plus 8 passes by ear.
 2. **Port the ch. 1 NL→EN→NL drill to the index:** units from pairs + `Index.span`;
    merge-on-no-pause becomes a lookup. Delete per-clip verification from `pipeline.py`.
-3. **Lesson 2: done** (`batkol/lessons/lesson02.json`, `gdrive:batkol-out/poc/lesson02/`).
+3. **Lesson 2: done** (`batkol/lessons/lesson02.json`, `gdrive:batkol-out/HP/lessons/lesson02.mp3`).
    - 28.5 min: 8 new items F–M, 7 reviews from lesson 1 (warm-up + ~10 min later),
      recombinations S3, S5, L+M; no TTS; 18 clips on its listening list.
    - Learner state (`batkol/learner.py`, `~/work/learner/state.json`) records what each lesson
