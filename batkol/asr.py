@@ -1,6 +1,7 @@
 """faster-whisper transcription with word timestamps."""
 import json
 import os
+import time
 from pathlib import Path
 
 from faster_whisper import WhisperModel
@@ -32,17 +33,22 @@ def transcribe(audio, lang, t0=0.0, **kw):
     return [w for seg in segments(audio, lang, t0=t0, **kw) for w in seg]
 
 
-def transcribe_long(audio, lang, cache, t0=0.0, win_s=300):
+def transcribe_long(audio, lang, cache, t0=0.0, win_s=300, budget_s=None):
     """Resumable: 5-min windows, one JSON line each in `cache`. The last segment
     of a window is dropped and re-transcribed at the start of the next one, so
-    no word is cut by a window edge. The progress bar advances per decoded segment."""
+    no word is cut by a window edge. The progress bar advances per decoded segment.
+    budget_s: start no new window after this many seconds; returns None while
+    windows remain (rerun to continue)."""
     cache = Path(cache)
     recs = [json.loads(l) for l in cache.read_text().splitlines()] if cache.exists() else []
     t = recs[-1]["next"] if recs else 0.0
     dur = len(audio) / SR
     pb = progress.bar(f"whisper {lang}", dur, t, disable=t >= dur - 0.5)
+    started = time.time()
     with open(cache, "a") as f:
         while t < dur - 0.5:
+            if budget_s is not None and time.time() - started >= budget_s:
+                break
             final = t + win_s >= dur
             segs = segments(audio[int(t * SR):int((t + win_s) * SR)], lang, t0=t0 + t,
                             on_segment=lambda e: progress.to(pb, t + e))
@@ -57,5 +63,7 @@ def transcribe_long(audio, lang, cache, t0=0.0, win_s=300):
             progress.note(f"  asr window {t:.0f}-{nxt:.0f} s: {len(rec['words'])} words")
             t = nxt
     pb.close()
+    if t < dur - 0.5:
+        return None
     recs = [json.loads(l) for l in cache.read_text().splitlines()]
     return [w for r in recs for w in r["words"]]

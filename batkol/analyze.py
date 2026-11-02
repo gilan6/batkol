@@ -2,8 +2,9 @@
 
   python -m batkol.analyze <chapter> nl|en             # resumable: rerun to continue
   python -m batkol.analyze <chapter> nl|en --slice 60  # time a 60 s slice first (writes no cache)
-  python -m batkol.analyze <chapter> nl|en --asr-only  # stop after whisper: splits a pass that would run
-                                                       # over 25 min (laptop: ~21 min chapters)
+  python -m batkol.analyze <chapter> nl|en --stop-after asr|emissions [--asr-minutes 15]
+      # steps under 25 min: end the run after that stage; whisper starts no 5-min window after
+      # 15 min (rerun to continue). Laptop: a 21-min chapter in 2 runs, a 39-min one in 4
 Threads: BATKOL_THREADS (default 4). Progress bars go to stderr; log the run and tail -f it.
 
 Stages, cached in ~/work/<chapter>/ and skipped when present:
@@ -116,7 +117,8 @@ def main():
     ap.add_argument("chapter")
     ap.add_argument("lang", choices=["nl", "en"])
     ap.add_argument("--slice", type=float, help="time this many seconds of audio, write nothing")
-    ap.add_argument("--asr-only", action="store_true", help="stop after the whisper pass")
+    ap.add_argument("--stop-after", choices=["asr", "emissions"], help="end the run after this stage")
+    ap.add_argument("--asr-minutes", type=float, help="whisper starts no new window after this many minutes")
     a = ap.parse_args()
     src = sources.load(a.chapter)[a.lang]
     run = WORK / a.chapter
@@ -126,11 +128,16 @@ def main():
     print(f"{a.chapter} {a.lang}: {len(x) / SR / 60:.1f} min of audio", flush=True)
     if a.slice:
         return time_slice(x, a.lang, a.slice)
-    words = asr.transcribe_long(x, a.lang, run / f"{a.lang}_asr.jsonl")
+    words = asr.transcribe_long(x, a.lang, run / f"{a.lang}_asr.jsonl",
+                                budget_s=a.asr_minutes * 60 if a.asr_minutes else None)
+    if words is None:
+        raise SystemExit(f"[stop] whisper used its {a.asr_minutes:g} min; rerun to continue")
     print(f"[asr] {len(words)} words", flush=True)
-    if a.asr_only:
+    if a.stop_after == "asr":
         return
     em = emissions(x, run / f"{a.lang}_emission.npy")
+    if a.stop_after == "emissions":
+        return
     text = Path(src["text"])
     if a.lang == "nl":
         why = text_gate(run, "nl", text, "nl_align.json")

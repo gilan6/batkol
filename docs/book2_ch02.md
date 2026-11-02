@@ -20,8 +20,8 @@ new leveling code was needed; the chapter 1 MP3 on Drive is the 2026-10-24 build
 - **Chapter number.** A chapter id ends in `ch<number>` (`sources.number`: b2ch02 → 2), so
   `batkol.edition` cuts the right chapter. `sources_local.py` builds the book-2 entries with one helper.
 - **Threads.** `BATKOL_THREADS` (default 4) sets the CPU threads of whisper and the CTC model.
-- **Shorter steps.** `analyze --asr-only` stops after whisper, so a ~21-min chapter runs as two steps
-  of at most ~16 min on the laptop instead of one of ~25.
+- **Shorter steps.** `analyze --asr-only` (now `--stop-after asr`) stops after whisper, so a ~21-min
+  chapter runs as two steps of at most ~16 min on the laptop instead of one of ~25.
 - **Progress.** Live bars (seconds of audio, ETA) for the whisper long-form pass (per decoded 30 s
   chunk), the emissions and the gap passes, plus one line per finished whisper window. Each chapter
   logs to `~/work/logs/<chapter>.log`; watch it with `tail -f`.

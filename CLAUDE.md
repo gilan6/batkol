@@ -71,9 +71,11 @@ See `docs/flow_v2.md` for the reasons, with data, and the status.
 # Laptop: BATKOL_THREADS=6, and each run appended to ~/work/logs/<chapter>.log (live bars: tail -f).
 uv run python -m batkol.sources fetch b2ch02            # resolve Drive paths, download audio + EPUBs
 uv run python -m batkol.analyze b2ch02 nl --slice 60    # time a slice first (working rule)
-uv run python -m batkol.analyze b2ch02 nl --asr-only    # whisper (~14 min for a 21-min chapter)
+uv run python -m batkol.analyze b2ch02 nl --stop-after asr   # whisper (~14 min for a 21-min chapter)
 uv run python -m batkol.edition b2ch02 nl               # audiobook vs EPUB(s): picks the text, decides book|reconcile|stop
 uv run python -m batkol.analyze b2ch02 nl               # emissions + alignment + gap pass + index (same for en)
+# Longer chapters, so no run passes 25 min: --asr-minutes 15 (rerun until whisper is done), then
+# --stop-after emissions, then the plain run (alignment, gap pass, index).
 uv run python -m batkol.drill b2ch02                    # leveled drill MP3/TSV/report from the indexes (~5 min, no ASR)
 bash scripts/publish.sh HP/book2 HP/meta/book2/b2ch02 ~/work/b2ch02/drill/*.{mp3,tsv,md} ~/work/b2ch02/edition_*.md
 uv run python -m batkol.index nl_ch01 en_ch01 pims_L01                 # (re)build indexes from caches (seconds)
