@@ -66,7 +66,7 @@ See `docs/flow_v2.md` for the reasons, with data, and the status.
 ## Commands
 
 ```bash
-# A new chapter, NL -> EN -> NL drill (docs/book2_ch01.md, docs/book2_ch02.md): one audio pass per source,
+# A new chapter, NL -> EN -> NL drill (docs/book2_ch01.md, _ch02.md, _ch03_04.md): one audio pass per source,
 # then cutting only. Register it in batkol/sources_local.py; the id's ch<number> picks the EPUB chapter.
 # Laptop: BATKOL_THREADS=6, and each run appended to ~/work/logs/<chapter>.log (live bars: tail -f).
 uv run python -m batkol.sources fetch b2ch02            # resolve Drive paths, download audio + EPUBs

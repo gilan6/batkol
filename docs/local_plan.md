@@ -5,9 +5,9 @@ No book text in this file. Facts are observed in the repo, the docs or earlier s
 
 ## 1. What the project does now
 
-| Product | Code | State (2026-10-31) |
+| Product | Code | State (2026-11-03) |
 |---|---|---|
-| (a) NL→EN→NL chapter drill: per unit, NL clip, 1 s, EN clip, 1 s, NL clip, 1 s | `drill.py` (index-only); `pipeline.py` is the legacy HP1 builder | HP1 ch. 1 v3 in `batkol-out/HP/book1/`; HP2 ch. 1 (56.4 min, 121 units; user: good) and ch. 2 (65.6 min, 136 units, leveled) in `batkol-out/HP/book2/` |
+| (a) NL→EN→NL chapter drill: per unit, NL clip, 1 s, EN clip, 1 s, NL clip, 1 s | `drill.py` (index-only); `pipeline.py` is the legacy HP1 builder | HP1 ch. 1 v3 in `batkol-out/HP/book1/`; HP2 ch. 1 (56.4 min, 121 units; user: good), ch. 2 (65.6 min, 136 units), ch. 3 (92.7 min, 214 units) and ch. 4 (123.1 min, 266 units) in `batkol-out/HP/book2/`; ch. 2–4 leveled, not yet listened to |
 | (b) Pimsleur-style lessons: frame + EN cue, pause, narrator, repeat; buildup; recalls; reviews from learner state | `lesson.py`, `learner.py`, `clipbank.py`, specs in `batkol/lessons/` | HP1 ch. 1, lessons 1–7 (units 1–27; 6 and 7 leveled). Lesson 8 starts at U28a; `lesson06.json` holds U28a–U30a as untaught candidates |
 
 Shared flow (`docs/flow_v2.md`): **analyze** (whisper large-v3-turbo int8 + MMS_FA CTC + gap pass)
@@ -124,8 +124,10 @@ Disk breakdown (sizes *(assumed)* unless stated):
    CTranslate2 *(assumed)*.
    - Done 2026-10-31. Slice of HP2 ch. 2 NL with `BATKOL_THREADS=6` (the 6 physical cores): whisper
      rtf 0.78, emissions rtf 0.37, models loaded in 52 s (4 threads, §4 step 6: 0.85 and 0.46).
-     A 21-min chapter is then ~16 min whisper + ~8 min emissions: `analyze --asr-only` splits the
-     pass in two, so each step stays under 25 min. 12 threads not tried.
+     A 21-min chapter is then ~16 min whisper + ~8 min emissions: `analyze --stop-after asr` (named
+     `--asr-only` until 2026-11-02) splits the pass in two, so each step stays under 25 min. Longer
+     chapters add `--asr-minutes` and `--stop-after emissions` (`docs/book2_ch03_04.md`). 12 threads
+     not tried.
 3. **Chapter registry:** generate `sources_local.py` entries for the remaining chapters (globs, as for
    HP2), so whole books can be queued.
 
