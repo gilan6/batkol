@@ -14,6 +14,8 @@ TARGET_LUFS = -18.0        # every source (narrators, cue voices, frames, TTS) l
 TRIM_DB = 3.0              # an utterance further than this from the target is pulled back to that edge
 MAX_TRIM_DB = 6.0          # ... by at most this much, so a clip of near-silence is never boosted into noise
 CEILING = 10 ** (-1 / 20)  # -1 dBFS: the limiter on the final mix
+LOOK = 0.005               # s: the limiter's look-ahead
+BLOCK_S = 60               # the mix is limited and encoded in blocks of this length (memory)
 
 
 def clip(src, start, end, fade_in=FADE, fade_out=FADE):
@@ -54,7 +56,7 @@ def match_loudness(clips, target=TARGET_LUFS, weights=None):
     return out, g
 
 
-def limit(x, ceiling=CEILING, look=0.005):
+def limit(x, ceiling=CEILING, look=LOOK):
     """Look-ahead peak limiter: the gain dips smoothly (over `look` s) around samples above the ceiling,
     and stays at 1 everywhere else, so the level set by match_loudness is kept."""
     need = np.minimum(1.0, ceiling / np.maximum(np.abs(x), 1e-9)).astype(np.float32)
@@ -65,7 +67,21 @@ def limit(x, ceiling=CEILING, look=0.005):
     return x * uniform_filter1d(minimum_filter1d(need, 2 * n + 1), n + 1)
 
 
+def limited(x):
+    """The limited mix in BLOCK_S blocks, each limited with more than the filters' reach (1.5 x look) of
+    samples on both sides, so the blocks join into what limiting the mix in one piece gives. In one piece
+    the temporaries are ~5x the mix: a 130-min chapter (1.4 GB) ran out of memory (2026-11-02)."""
+    step, pad = BLOCK_S * OUT_SR, 2 * int(LOOK * OUT_SR) + 2
+    for a in range(0, len(x), step):
+        a0, b, b0 = max(0, a - pad), min(len(x), a + step), min(len(x), a + step + pad)
+        yield limit(x[a0:b0])[a - a0:b - a0]
+
+
 def encode_mp3(x, path, bitrate="96k"):
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(OUT_SR), "-ac", "1", "-i", "-",
-                    "-c:a", "libmp3lame", "-b:a", bitrate, str(path)],
-                   input=limit(x).astype(np.float32).tobytes(), check=True)
+    p = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(OUT_SR), "-ac", "1", "-i", "-",
+                          "-c:a", "libmp3lame", "-b:a", bitrate, str(path)], stdin=subprocess.PIPE)
+    for y in limited(x):
+        p.stdin.write(y.astype(np.float32).tobytes())
+    p.stdin.close()
+    if p.wait():
+        raise subprocess.CalledProcessError(p.returncode, "ffmpeg")
