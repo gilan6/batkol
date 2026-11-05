@@ -1,12 +1,14 @@
 """Interleaved audiobook: a chapter as NL -> EN -> NL units, planned and cut from the audio indexes only.
 
   python -m batkol.interleaved <chapter>                 # plan + render
+  python -m batkol.interleaved <chapter> --speeds 1,1,1  # every play at normal speed (the layout until 2026-11-05)
   python -m batkol.interleaved ch01 --no-risk-merge --no-render --compare ~/work/ch01/units.json
                                                           # regression vs the verified HP1 ch. 1 build (v3)
 
 No ASR and no verification pass: word timings, pauses, cut points and risks
 come from `batkol.index` (one pass per source, `batkol.analyze`).
-Per unit (legacy layout): NL clip, gap, EN clip, gap, NL clip, gap.
+Per unit: NL clip, gap, EN clip, gap, NL clip, gap. --speeds sets the speeds of the three plays (default
+0.8,1,1: the first NL play slowed with the pitch kept, `build.atempo`).
 
 Units are the LaBSE sentence groups (cached pairs.json). NL sentences without
 an EN partner join the previous unit, so every NL sentence is heard; EN
@@ -19,7 +21,8 @@ an NL cut falls where the narration departs from the text for a few words
 (`batkol.edition` runs: book word timings are unreliable there).
 Merging stops at MAX_NL_S of Dutch speech per unit.
 
-Output in ~/work/<chapter>/interleaved/: <name>.mp3, <name>.tsv, <name>_report.md, units.json.
+Output in ~/work/<chapter>/interleaved/ (or --out): <name>.mp3, <name>.tsv, <name>_report.md, units.json.
+TSV out_start, out_en, out_nl2: where a unit's first NL, EN and second NL play start in the MP3 (s).
 """
 import argparse
 import csv
@@ -36,8 +39,9 @@ from .sentences import chapter_sentences
 WORK = Path.home() / "work"
 MAX_NL_S = 45.0
 RUN_PAD = 0.5  # s around an edition run (whisper vs CTC timing)
+SPEEDS = (0.8, 1.0, 1.0)  # first NL play, EN play, second NL play (docs/interleaved_speed.md)
 TSV_COLS = ["idx", "nl_text", "en_text", "nl_file", "nl_start", "nl_end", "en_file", "en_start", "en_end",
-            "out_start", "nl_ids", "en_ids", "sim", "en_coverage", "flags", "risk", "merged"]
+            "out_start", "out_en", "out_nl2", "nl_ids", "en_ids", "sim", "en_coverage", "flags", "risk", "merged"]
 
 
 def pairs(chapter, nl_sents, en_sents):
@@ -176,18 +180,23 @@ def clips(nl, en, units, nl_sents, en_sents):
     return units
 
 
-def render(units, nl_src, en_src, out, name, gap_s):
+def render(units, nl_src, en_src, out, name, gap_s, speeds=SPEEDS):
+    """Per unit: NL, gap, EN, gap, NL, gap, each play at its speed. Clips are leveled first, then stretched,
+    so the leveling does not depend on the speeds; a play at speed 1 is the leveled clip as is."""
     nl_c, g_nl = build.match_loudness([build.clip(nl_src, u["nl_start"], u["nl_end"]) for u in units])
     en_c, g_en = build.match_loudness([build.clip(en_src, u["en_start"], u["en_end"]) for u in units])
     gap = np.zeros(int(gap_s * build.OUT_SR), np.float32)
+    s_nl1, s_en, s_nl2 = speeds
+    play = lambda x, s: x if s == 1 else build.atempo(x, s)
     parts, pos = [], 0
     for u, a, b in zip(units, nl_c, en_c):
-        u["out_start"] = round(pos / build.OUT_SR, 3)
-        for x in (a, gap, b, gap, a, gap):
-            parts.append(x)
-            pos += len(x)
+        nl1 = play(a, s_nl1)
+        for col, x in (("out_start", nl1), ("out_en", play(b, s_en)), ("out_nl2", nl1 if s_nl2 == s_nl1 else play(a, s_nl2))):
+            u[col] = round(pos / build.OUT_SR, 3)
+            parts += [x, gap]
+            pos += len(x) + len(gap)
     build.encode_mp3(np.concatenate(parts), out / f"{name}.mp3")
-    return dict(gain_nl=round(g_nl, 1), gain_en=round(g_en, 1), seconds=round(pos / build.OUT_SR, 1))
+    return dict(gain_nl=round(g_nl, 1), gain_en=round(g_en, 1), seconds=round(pos / build.OUT_SR, 1), speeds=list(speeds))
 
 
 def write_tsv(units, src, path):
@@ -196,7 +205,8 @@ def write_tsv(units, src, path):
         wr.writerow(TSV_COLS)
         for u in units:
             wr.writerow([u["idx"], u["nl_text"], u["en_text"], src["nl"]["drive"], u["nl_start"], u["nl_end"],
-                         src["en"]["drive"], u["en_start"], u["en_end"], u.get("out_start", ""),
+                         src["en"]["drive"], u["en_start"], u["en_end"],
+                         *(u.get(c, "") for c in ("out_start", "out_en", "out_nl2")),
                          ",".join(map(str, u["nl_ids"])), ",".join(map(str, u["en_ids"])), u["sim"], "",
                          ";".join(u["flags"]), ";".join(u["risk"]), ";".join(u["merged"])])
 
@@ -245,6 +255,8 @@ def report(chapter, name, units, stats, cov, left, build_stats, cmp):
     if build_stats:
         L.append(f"- MP3: `{name}.mp3`, {build_stats['seconds'] / 60:.1f} min. "
                  f"Gain NL {build_stats['gain_nl']:+} dB, EN {build_stats['gain_en']:+} dB.")
+        s = build_stats["speeds"]
+        L.append(f"- Speeds: first NL {s[0]:g}×, EN {s[1]:g}×, second NL {s[2]:g}× (pitch kept).")
     L += [f"- Units: {stats['units']} (from {stats['raw_units']} sentence groups). "
           f"Merged boundaries by reason: " + (", ".join(f"{k} ×{v}" for k, v in stats["merged"].items()) or "none"),
           f"- NL sentences without EN partner, joined to the previous unit: {len(stats['nl_joined'])} {stats['nl_joined']}",
@@ -274,11 +286,25 @@ def default_name(chapter):
     return f"hp{chapter[1]}_{chapter[2:]}" if chapter.startswith("b") else f"hp1_{chapter}"
 
 
+def speeds_arg(s):
+    """'0.8,1,1' or '[0.8, 1, 1]': the speeds of the first NL play, the EN play and the second NL play."""
+    try:
+        v = tuple(float(x) for x in s.strip().strip("[]").split(","))
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"not three numbers: {s!r}")
+    if len(v) != 3 or not all(0.5 <= x <= 2 for x in v):
+        raise argparse.ArgumentTypeError(f"need three speeds from 0.5 to 2 (first NL, EN, second NL), got {s!r}")
+    return v
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("chapter")
     ap.add_argument("--name")
     ap.add_argument("--gap", type=float, default=1.0)
+    ap.add_argument("--speeds", type=speeds_arg, default=SPEEDS,
+                    help="speeds of the first NL, the EN and the second NL play, each 0.5-2 (default 0.8,1,1)")
+    ap.add_argument("--out", help="output folder (default ~/work/<chapter>/interleaved)")
     ap.add_argument("--no-risk-merge", action="store_true")
     ap.add_argument("--no-render", action="store_true", help="plan, TSV and report only")
     ap.add_argument("--compare", help="units.json of an earlier build (regression)")
@@ -290,9 +316,9 @@ def main():
     units, stats = plan(nl, en, pairs(a.chapter, nl_sents, en_sents), risk_merge=not a.no_risk_merge,
                         runs=text_runs(a.chapter))
     units = clips(nl, en, units, nl_sents, en_sents)
-    out = WORK / a.chapter / "interleaved"
+    out = Path(a.out).expanduser() if a.out else WORK / a.chapter / "interleaved"
     out.mkdir(parents=True, exist_ok=True)
-    bstats = None if a.no_render else render(units, src["nl"]["local"], src["en"]["local"], out, name, a.gap)
+    bstats = None if a.no_render else render(units, src["nl"]["local"], src["en"]["local"], out, name, a.gap, a.speeds)
     cov, left = coverage(nl, units)
     cmp = compare(units, a.compare) if a.compare else None
     write_tsv(units, src, out / f"{name}.tsv")

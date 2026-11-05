@@ -1,4 +1,5 @@
-"""Audio for every output (interleaved audiobook, lessons): cut clips, level them, limit and encode MP3."""
+"""Audio for every output (interleaved audiobook, lessons): cut clips, level them, change their speed,
+limit and encode MP3."""
 import re
 import subprocess
 import tempfile
@@ -16,6 +17,7 @@ MAX_TRIM_DB = 6.0          # ... by at most this much, so a clip of near-silence
 CEILING = 10 ** (-1 / 20)  # -1 dBFS: the limiter on the final mix
 LOOK = 0.005               # s: the limiter's look-ahead
 BLOCK_S = 60               # the mix is limited and encoded in blocks of this length (memory)
+ATEMPO_PAD_S = 0.3         # s of silence fed after a clip so atempo's last window reaches its end (trimmed off)
 
 
 def clip(src, start, end, fade_in=FADE, fade_out=FADE):
@@ -27,6 +29,23 @@ def clip(src, start, end, fade_in=FADE, fade_out=FADE):
         else:
             x[len(x) - n:] *= ramp[::-1]
     return x
+
+
+def atempo(x, speed):
+    """x played at `speed` with the pitch kept: ffmpeg atempo (time-domain overlap-add), chosen by ear over
+    rubberband, Praat PSOLA and plain resampling (docs/interleaved_speed.md). Returns exactly
+    round(len(x) / speed) samples. atempo takes 0.5-100, but above 2 it skips audio instead of blending it."""
+    if not 0.5 <= speed <= 2:
+        raise ValueError(f"speed {speed} is outside 0.5-2")
+    n = round(len(x) / speed)
+    pad = np.zeros(int(ATEMPO_PAD_S * OUT_SR), np.float32)
+    r = subprocess.run(["ffmpeg", "-v", "error", "-f", "f32le", "-ar", str(OUT_SR), "-ac", "1", "-i", "-",
+                        "-af", f"atempo={speed:g}", "-f", "f32le", "-"],
+                       input=np.concatenate([x.astype(np.float32), pad]).tobytes(), capture_output=True, check=True)
+    y = np.frombuffer(r.stdout, np.float32)
+    if len(y) < n:
+        raise RuntimeError(f"atempo returned {len(y)} samples, {n} expected")
+    return y[:n].copy()
 
 
 def lufs(x):
