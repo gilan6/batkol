@@ -18,14 +18,14 @@ cross-source leveling of `batkol/build.py`. Chapter 3 first, then chapter 4.
   - `--asr-minutes M`: whisper starts no new 5-min window after M minutes; the run stops with a
     `[stop]` line and a rerun continues from the cached windows.
 - **Runs from a snapshot of HEAD** (`~/work/code/batkol-<sha>`, the parallel-session rule), so another
-  session's uncommitted edits can't reach a long run. Chapter 3's NL whisper ran on `708ff56`, under
-  `timeout 23m`, before the flags existed; every later step ran on `26c57c2`.
+  session's uncommitted edits can't reach a long run. Chapter 3's NL whisper ran on `1d823bc`, under
+  `timeout 23m`, before the flags existed; every later step ran on `5215164`.
 - **Registry.** `b2ch03` and `b2ch04` are two more `hp2(...)` lines in `sources_local.py`.
 - **Memory in the render.** The first chapter-4 render was killed by the OOM killer (7.2 GB resident of
   WSL's 7.5 GB). Limiting the whole mix in one piece needs ~4.9x the mix in temporaries (measured on
   10- and 30-min mixes), and chapter 4's mix is 123 min, 1.3 GB as float32; chapter 3's 93 min had
   just fit. `build.limited` now limits the mix in 60 s blocks, each with more than the filters' reach
-  of samples on both sides, and `encode_mp3` streams the blocks to ffmpeg (`4ded078`). Output is
+  of samples on both sides, and `encode_mp3` streams the blocks to ffmpeg (`fc38858`). Output is
   unchanged: same PCM and MP3 bytes on a test mix with peaks on every block boundary.
 
 ## Chapter 3 (laptop, `BATKOL_THREADS=6`)
@@ -84,7 +84,7 @@ cross-source leveling of `batkol/build.py`. Chapter 3 first, then chapter 4.
 - **EN index.** 5683 words (ok 5558, fuzzy 39, differs 81, added 5), 119 book tokens omitted by the
   cast, 1084 pause boundaries.
 - **Interleaved audiobook.** `gdrive:batkol-out/HP/book2/hp2_ch04.mp3`; TSV and reports in `HP/meta/book2/b2ch04/`.
-  - 123.1 min, 266 units from 388 sentence groups (2 min on `4ded078`; the first try ran out of memory,
+  - 123.1 min, 266 units from 388 sentence groups (2 min on `fc38858`; the first try ran out of memory,
     see above). Merges: nl_no_pause ×59, en_no_pause ×29, en_edge_score ×30, nl_edge_score ×9,
     nl_text_run ×9. No unpaired sentences.
   - NL word coverage 100 %. Cuts inside speech: 1, the last unit's EN end at the file edge: the last word

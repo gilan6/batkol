@@ -56,7 +56,7 @@ Every sample was leveled to −18 LUFS, and the user chose by ear.
 
 ## Chapter 4 rebuilt (laptop)
 
-- **Run.** `python -m batkol.interleaved b2ch04` from a snapshot of `3943bb6`: 3.1 min wall, peak memory
+- **Run.** `python -m batkol.interleaved b2ch04` from a snapshot of `8ff98cb`: 3.1 min wall, peak memory
   3.0 GB (at `--speeds 1,1,1`: 2.6 min, 2.7 GB).
 - **Nothing else changed.** At `--speeds 1,1,1` the MP3 is byte-identical to the 2026-11-03 build. At
   `0.8,1,1` the 266 units, their sentence ids, cut times, flags, risks and merges are identical to it.
