@@ -49,10 +49,9 @@ the Dutch narrator, your turn. Then "Listen and repeat", and the phrase built up
 
 ### Interleaved audiobook
 
-One MP3 per chapter: every sentence in Dutch slowed to 0.8× (the pitch is kept), then in
-English, then in Dutch again at normal speed, with 1 s gaps. You hear the sentence slowly, get
-its meaning, then hear it at full speed knowing what it says. It trains listening
-comprehension. The three speeds can be changed.
+One MP3 per chapter: each sentence in Dutch, English, then Dutch again, with 1 s gaps.
+Speeds are flexible; the default [0.8, 1, 1] slows the first Dutch play, pitch kept. It trains
+listening comprehension.
 
 https://github.com/user-attachments/assets/d67a66dc-70d7-4142-824a-1b0411acc359
 
