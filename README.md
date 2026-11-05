@@ -49,13 +49,14 @@ the Dutch narrator, your turn. Then "Listen and repeat", and the phrase built up
 
 ### Interleaved audiobook
 
-One MP3 per chapter: every sentence in Dutch, then English, then Dutch again, with 1 s
-gaps. You hear the sentence, get its meaning, then hear it again knowing what it says. It
-trains listening comprehension.
+One MP3 per chapter: every sentence in Dutch slowed to 0.8× (the pitch is kept), then in
+English, then in Dutch again at normal speed, with 1 s gaps. You hear the sentence slowly, get
+its meaning, then hear it at full speed knowing what it says. It trains listening
+comprehension. The three speeds can be changed.
 
-https://github.com/user-attachments/assets/f23da0b2-169e-4185-8763-9291386da2da
+https://github.com/user-attachments/assets/d67a66dc-70d7-4142-824a-1b0411acc359
 
-*Example: one sentence from book 2, chapter 1 (10 s), taken from the 56-minute chapter file.
+*Example: one sentence from book 2, chapter 4 (11 s), taken from the 132-minute chapter file.
 [Listen to the MP3](https://github.com/gilan6/batkol/releases/download/readme-examples/interleaved_example.mp3)*
 
 ### Lessons from learner content (50languages)
