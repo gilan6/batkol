@@ -82,6 +82,7 @@ Disk breakdown (sizes *(assumed)* unless stated):
 2. **Claude Code** in the same shell: native installer, then `/login`. Optionally `gh auth login`, for PRs from the laptop.
 3. **Repo:**
    - `git clone https://github.com/gilan6/batkol.git ~/batkol` (`main`).
+   - `git config core.hooksPath scripts/hooks` (privacy hooks; see CLAUDE.md).
    - Switch torch and torchaudio to the CPU index (§6), then run `uv lock`. Check that `uv.lock`
      has no `nvidia-*` or `triton` packages left.
 4. **rclone remote named `gdrive`** for your Google Drive; the code hard-codes `gdrive:`.

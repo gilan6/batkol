@@ -9,6 +9,17 @@ Pimsleur-style Dutch pronunciation drills cut from Harry Potter audiobooks (book
 - English: Audible full cast.
 - Instruction phrases ("frames"): Pimsleur Dutch I.
 
+## Privacy (this repo is public)
+
+- Anything about the user, their machine or accounts goes in `private/`, never in a tracked file.
+  `private/` is git-ignored here and tracked only in a private repo. Files are copied from this repo
+  to the private one, never back.
+- Git hooks block personal data in commits and pushes. Enable them once per clone:
+  `git config core.hooksPath scripts/hooks`. Never bypass them: fix the hit or ask the user.
+- Rewriting public history needs the user's OK.
+
+Private notes, where present: @private/CLAUDE.md
+
 ## Where it runs
 
 The user's laptop: Windows 11 + WSL2 Ubuntu, x86_64, 16 GB RAM, no GPU. Everything runs on CPU.

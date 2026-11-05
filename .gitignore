@@ -11,3 +11,5 @@ __pycache__/
 *.txt.gz
 # your own file names: copy batkol/sources_local.example.py
 batkol/sources_local.py
+# personal notes: tracked only in the private repo (CLAUDE.md, Privacy)
+/private
