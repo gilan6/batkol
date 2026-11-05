@@ -15,7 +15,7 @@ candidate with the most ok tokens wins; its text becomes the chapter text and
              local: alignment re-syncs on the matching words around them, so the
              clip of a unit holding a run is still complete (tested on a fixture
              with a reworded sentence); only a cut inside a run is unsafe, and
-             `batkol.drill` merges across those (nl_text_run). EN is always book:
+             `batkol.interleaved` merges across those (nl_text_run). EN is always book:
              its index is built from what the cast said.
   reconcile  NL, ok+fuzzy < MIN_MATCH: too far from the text to force-align it;
              analyze refuses (a reconciliation step is not written)

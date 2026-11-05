@@ -47,7 +47,7 @@ def align(nl, en, model):
 
 
 def split_diagonal(groups, enl, een):
-    """Concatenations score high on shared topic; prefer smaller drill units when
+    """Concatenations score high on shared topic; prefer smaller units when
     the 2:2 group decomposes into two credible 1:1 pairs."""
     out = []
     for nids, eids, sim in groups:

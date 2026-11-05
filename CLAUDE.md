@@ -1,6 +1,7 @@
 # Batkol
 
 Formerly `hp-dutch-drills`: package `hpdrill`, Drive folders `hp-nl` and `hp-nl-out` (renamed 2026-10-27).
+The interleaved audiobook was called "drill" (`batkol/drill.py`, `~/work/<chapter>/drill/`) until 2026-11-05.
 Older logs, reports and Drive output files may still name the old paths.
 
 Pimsleur-style Dutch pronunciation drills cut from Harry Potter audiobooks (book 1; book 2 started).
@@ -66,7 +67,7 @@ See `docs/flow_v2.md` for the reasons, with data, and the status.
 ## Commands
 
 ```bash
-# A new chapter, NL -> EN -> NL drill (docs/book2_ch01.md, _ch02.md, _ch03_04.md): one audio pass per source,
+# A new chapter's interleaved audiobook (docs/book2_ch01.md, _ch02.md, _ch03_04.md): one audio pass per source,
 # then cutting only. Register it in batkol/sources_local.py; the id's ch<number> picks the EPUB chapter.
 # Laptop: BATKOL_THREADS=6, and each run appended to ~/work/logs/<chapter>.log (live bars: tail -f).
 uv run python -m batkol.sources fetch b2ch02            # resolve Drive paths, download audio + EPUBs
@@ -76,8 +77,8 @@ uv run python -m batkol.edition b2ch02 nl               # audiobook vs EPUB(s): 
 uv run python -m batkol.analyze b2ch02 nl               # emissions + alignment + gap pass + index (same for en)
 # Longer chapters, so no run passes 25 min: --asr-minutes 15 (rerun until whisper is done), then
 # --stop-after emissions, then the plain run (alignment, gap pass, index).
-uv run python -m batkol.drill b2ch02                    # leveled drill MP3/TSV/report from the indexes (~5 min, no ASR)
-bash scripts/publish.sh HP/book2 HP/meta/book2/b2ch02 ~/work/b2ch02/drill/*.{mp3,tsv,md} ~/work/b2ch02/edition_*.md
+uv run python -m batkol.interleaved b2ch02              # leveled MP3/TSV/report from the indexes (~5 min, no ASR)
+bash scripts/publish.sh HP/book2 HP/meta/book2/b2ch02 ~/work/b2ch02/interleaved/*.{mp3,tsv,md} ~/work/b2ch02/edition_*.md
 uv run python -m batkol.index nl_ch01 en_ch01 pims_L01                 # (re)build indexes from caches (seconds)
 uv run python -m batkol.lesson view 7 12                                # pause chunks + book ranges for item selection
 # batkol/lessons/ch01_plan.json: DRAFT items for all of ch. 1 (A-W hand-picked; u012.* automatic and
@@ -90,8 +91,8 @@ uv run python -m batkol.validate_index all                             # index v
 uv run python -m batkol.clipbank qa ~/work/lesson01/lesson01.json ~/work/bank/spans.jsonl 10
 uv run python -m batkol.clipbank verdict2 ~/work/bank/spans.jsonl <span_id> pass|fail [note]
 ```
-- Legacy, pre-index: `batkol/pipeline.py` built the HP1 ch. 1 NL→EN→NL drill (v3, re-transcription
-  verified) and its stage caches, which the HP1 indexes read. New chapters use `analyze` + `drill`;
+- Legacy, pre-index: `batkol/pipeline.py` built the HP1 ch. 1 interleaved audiobook (v3, re-transcription
+  verified) and its stage caches, which the HP1 indexes read. New chapters use `analyze` + `interleaved`;
   per-clip verification is not part of the flow any more.
 
 ## Working rules (from the user)

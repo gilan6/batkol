@@ -11,7 +11,7 @@ After that, all work is planning and cutting. The data agrees.
 
 | Work | Whisper / alignment compute |
 |---|---|
-| Re-transcribing cut clips (ch. 1 drill v1: 313 units × 2; v3: 151 units; lesson bank: 65 clips) | ≈ 64 min |
+| Re-transcribing cut clips (ch. 1 interleaved v1: 313 units × 2; v3: 151 units; lesson bank: 65 clips) | ≈ 64 min |
 | One full pass, EN ch. 1: transcript 6.1 min, CTC emissions + alignment 4.9 min, gap pass 6.6 min (unbatched) | ≈ 18 min |
 | One full pass, NL ch. 1: emissions 5.3 min, alignment 1 s, transcript 8.4 min, gap pass 2.6 min (398 gaps in 28 batched windows) | ≈ 16 min |
 | Index build from the cached pass | 3–5 s per source |
@@ -28,10 +28,10 @@ inside the cut, adds the index's signal risks, and compares with what whisper he
 
 | Clip set | Edges with a defect found by re-transcription | Flagged by the index | Clean edges also flagged |
 |---|---|---|---|
-| EN ch. 1 drill v1 (313 units) | 7 | **7 (100 %)** | 20.8 % |
-| EN ch. 1 drill v3 (239 units) | 2 | **2 (100 %)** | 8.8 % |
-| NL ch. 1 drill v1 | 19 | 16 (84 %) → see §4 | 30.6 % |
-| NL ch. 1 drill v3 | 13 | 11 (85 %) → see §4 | 10.8 % |
+| EN ch. 1 interleaved v1 (313 units) | 7 | **7 (100 %)** | 20.8 % |
+| EN ch. 1 interleaved v3 (239 units) | 2 | **2 (100 %)** | 8.8 % |
+| NL ch. 1 interleaved v1 | 19 | 16 (84 %) → see §4 | 30.6 % |
+| NL ch. 1 interleaved v3 | 13 | 11 (85 %) → see §4 | 10.8 % |
 
 The index rules that predict defects:
 1. Token diff: words of the expected text vs the index words inside the cut. This catches
@@ -117,13 +117,13 @@ Keys: `nl_ch01`, `en_ch01`, `pims_L01`.
 - `gdrive:batkol-out/state/`: indexes, stage caches (alignment, ASR, emissions, gap passes),
   repaired text, clip banks, lesson data.
 - `gdrive:batkol-out/HP/` (`poc/` until 2026-10-31): audio files only in `lessons/` (lessons and their
-  listening lists), `book1/` and `book2/` (chapter drills; `book1/hp1_ch01.mp3` is the ch. 1 drill v3);
+  listening lists), `book1/` and `book2/` (interleaved audiobooks; `book1/hp1_ch01.mp3` is the ch. 1 interleaved v3);
   sidecar JSON, TSV, reports and READMEs in `meta/`, one folder per lesson or chapter
   (`scripts/publish.sh` keeps it that way). `archive/` keeps the PoC-era outputs as they were.
 
 ### Legacy
 
-`pipeline.py` (ch. 1 drill builder) still runs its own energy cuts and per-clip
+`pipeline.py` (ch. 1 interleaved builder) still runs its own energy cuts and per-clip
 verification. Its stage caches feed the indexes. Porting it is next-step 2.
 
 ### Stopped after two failed fixes: Dutch additions right before a sentence
@@ -202,7 +202,7 @@ The CTC score filter (≥ 0.5) does separate real gap words from hallucinations:
      `python -m batkol.clipbank verdict2 ~/work/bank/spans.jsonl <span_id> pass|fail`.
    - Refit `lesson.risky_onset` once a list contains failures. It is fitted on 26 cuts
      (3 leaks) plus 8 passes by ear.
-2. **Port the ch. 1 NL→EN→NL drill to the index:** units from pairs + `Index.span`;
+2. **Port the ch. 1 NL→EN→NL interleaved audiobook to the index:** units from pairs + `Index.span`;
    merge-on-no-pause becomes a lookup. Delete per-clip verification from `pipeline.py`.
 3. **Lesson 2: done** (`batkol/lessons/lesson02.json`, `gdrive:batkol-out/HP/lessons/lesson02.mp3`).
    - 28.5 min: 8 new items F–M, 7 reviews from lesson 1 (warm-up + ~10 min later),

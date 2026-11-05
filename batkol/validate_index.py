@@ -1,6 +1,6 @@
 """Does the audio index alone predict what clip re-transcription found?
 
-For every historical clip (ch01 drill v1 and v3, lesson clip bank) the index
+For every historical clip (ch01 interleaved v1 and v3, lesson clip bank) the index
 gives the words inside the cut ("index transcript"); its edge diff against the
 expected tokens is compared with the edge diff whisper produced on the clip.
 Run: uv run python -m batkol.validate_index [nl|en|all]
@@ -117,7 +117,7 @@ def compare(rows, label):
     return dict(found=tp + fn, predicted=tp, recall=round(tp / max(1, tp + fn), 3), index_only=fp)
 
 
-def drill(units_path, verify_path, langs, label):
+def interleaved(units_path, verify_path, langs, label):
     units = {u["idx"]: u for u in json.loads(Path(units_path).read_text())}
     ver = [json.loads(l) for l in Path(verify_path).read_text().splitlines()]
     nl_sent = {s["id"]: s["text"] for s in chapter_sentences(W / "text/nl.ch01.txt")}
@@ -165,8 +165,8 @@ def bank():
 if __name__ == "__main__":
     which = sys.argv[1] if len(sys.argv) > 1 else "all"
     langs = ["nl", "en"] if which == "all" else [which]
-    out = {"v1": drill(W / "ch01/v1/units.json", W / "ch01/v1/verify.jsonl", langs, "ch01 v1"),
-           "v3": drill(W / "ch01/units.json", W / "ch01/verify.jsonl", langs, "ch01 v3")}
+    out = {"v1": interleaved(W / "ch01/v1/units.json", W / "ch01/v1/verify.jsonl", langs, "ch01 v1"),
+           "v3": interleaved(W / "ch01/units.json", W / "ch01/verify.jsonl", langs, "ch01 v3")}
     if which == "all":
         out["bank"] = bank()
     (W / "index" / f"validation_{which}.json").write_text(json.dumps(out, indent=1))

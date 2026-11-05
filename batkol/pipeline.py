@@ -1,4 +1,4 @@
-"""HP1 ch. 1 -> NL/EN/NL drill MP3 + TSV.
+"""HP1 ch. 1 -> NL/EN/NL interleaved audiobook MP3 + TSV.
 
 Stages cache JSON in the output dir; delete a file to recompute that stage.
 Full chapter:  python -m batkol.pipeline --out ~/work/ch01
@@ -129,7 +129,7 @@ def run_en_match(en, hyp):
 
 def merge_no_pause(groups, db, nl_t, en_t, nl_by_sent, en_by_sent, max_nl_s=45.0):
     """Merge neighbouring groups when either language has no real pause between
-    them: a drill unit must be separable without cutting through speech."""
+    them: a unit must be separable without cutting through speech."""
     def rng(ids, by_sent):
         k = [i for s in ids for i in by_sent.get(s, [])]
         return (min(k), max(k)) if k else None

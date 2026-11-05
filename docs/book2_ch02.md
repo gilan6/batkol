@@ -1,14 +1,14 @@
-# HP2 ch. 2: NL→EN→NL drill, leveled (2026-10-31)
+# HP2 ch. 2: NL→EN→NL interleaved audiobook, leveled (2026-10-31)
 
 No book text in this file. Numbers are observed unless marked *(assumed)*.
 
 ## Goal
 
 Book 2, chapter 2, in the format of chapter 1 (`docs/book2_ch01.md`): per unit, NL clip, 1 s gap, EN
-clip, 1 s gap, NL clip, 1 s gap. The user's verdict on the chapter 1 drill: good.
+clip, 1 s gap, NL clip, 1 s gap. The user's verdict on the chapter 1 audiobook: good.
 
 It is the first chapter delivered with the cross-source leveling made while preparing the public
-repo's README examples (`batkol/build.py`, 2026-10-27). The drill renderer already called it, so no
+repo's README examples (`batkol/build.py`, 2026-10-27). The interleaved renderer already called it, so no
 new leveling code was needed; the chapter 1 MP3 on Drive is the 2026-10-24 build, from before it.
 
 ## What changed for chapter 2
@@ -46,9 +46,9 @@ new leveling code was needed; the chapter 1 MP3 on Drive is the 2026-10-24 build
   gap pass 4.3 min (95 gaps in 9 windows, 2 words kept), match and index seconds.
 - **EN index.** 2833 words (ok 2809, fuzzy 6, differs 15, added 3), 76 book tokens omitted by the cast,
   573 pause boundaries.
-- **Total.** About 60 min of compute from fetch to drill, in steps of at most 14.3 min.
+- **Total.** About 60 min of compute from fetch to the finished MP3, in steps of at most 14.3 min.
 
-## Drill
+## Interleaved audiobook
 
 `gdrive:batkol-out/HP/book2/hp2_ch02.mp3`; the TSV, the report and both edition reports are in
 `gdrive:batkol-out/HP/meta/book2/b2ch02/`.
@@ -80,4 +80,4 @@ target ±3 dB plus 0.5 dB of measuring slack.
 
 - A listening check of ch. 2.
 - The ch. 1 MP3 on Drive is still the unleveled 2026-10-24 build. The leveled rebuild is in
-  `~/work/b2ch01/drill/`; replacing the Drive copy is the user's call.
+  `~/work/b2ch01/interleaved/`; replacing the Drive copy is the user's call.

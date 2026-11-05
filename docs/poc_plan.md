@@ -44,7 +44,7 @@ This Claude Code cloud session.
 - Drive is accessed through rclone.
 - §8 of the old plan (Colab) is not needed for the PoC.
 
-### Built and verified (repo `batkol/`, NL→EN→NL ch. 1 drill)
+### Built and verified (repo `batkol/`, NL→EN→NL ch. 1 interleaved audiobook)
 
 - EPUB text extraction and repair; sentence splitting.
 - NL forced alignment: torchaudio MMS_FA in 120 s windows.
@@ -162,5 +162,5 @@ Sound bites are reused many times: a Dutch target plays about 6 times in one les
 - **Rebuilds** recheck nothing. Lesson 1 v1 checked 65 clips; later rebuilds checked 0 (only new recombination clips were added). Render is pure assembly, and the sidecar carries the clip id of every utterance.
 - **Next:**
   - a retry before dropping, e.g. move an in-speech onset to the next energy minimum;
-  - port the ch. 1 NL→EN→NL drill to the same bank;
+  - port the ch. 1 NL→EN→NL interleaved audiobook to the same bank;
   - carry recalls that are not yet due (1 h … 2 y) into the next lesson.

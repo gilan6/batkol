@@ -1,15 +1,15 @@
-"""NL -> EN -> NL chapter drill, planned and cut from the audio indexes only.
+"""Interleaved audiobook: a chapter as NL -> EN -> NL units, planned and cut from the audio indexes only.
 
-  python -m batkol.drill <chapter>                       # plan + render
-  python -m batkol.drill ch01 --no-risk-merge --no-render --compare ~/work/ch01/units.json
-                                                          # regression vs the verified HP1 drill v3
+  python -m batkol.interleaved <chapter>                 # plan + render
+  python -m batkol.interleaved ch01 --no-risk-merge --no-render --compare ~/work/ch01/units.json
+                                                          # regression vs the verified HP1 ch. 1 build (v3)
 
 No ASR and no verification pass: word timings, pauses, cut points and risks
 come from `batkol.index` (one pass per source, `batkol.analyze`).
 Per unit (legacy layout): NL clip, gap, EN clip, gap, NL clip, gap.
 
 Units are the LaBSE sentence groups (cached pairs.json). NL sentences without
-an EN partner join the previous unit, so every NL sentence is drilled; EN
+an EN partner join the previous unit, so every NL sentence is heard; EN
 sentences without an NL partner are left out. Neighbouring units are merged
 when either language has no real pause between them (a cut would go through
 speech) and, with risk merge (default), when an edge word at the cut has an
@@ -19,7 +19,7 @@ an NL cut falls where the narration departs from the text for a few words
 (`batkol.edition` runs: book word timings are unreliable there).
 Merging stops at MAX_NL_S of Dutch speech per unit.
 
-Output in ~/work/<chapter>/drill/: <name>.mp3, <name>.tsv, <name>_report.md, units.json.
+Output in ~/work/<chapter>/interleaved/: <name>.mp3, <name>.tsv, <name>_report.md, units.json.
 """
 import argparse
 import csv
@@ -240,7 +240,7 @@ def mmss(t):
 
 def report(chapter, name, units, stats, cov, left, build_stats, cmp):
     flagged = [u for u in units if u["flags"] or u["risk"]]
-    L = [f"# {name}: NL → EN → NL drill, {chapter}", "",
+    L = [f"# {name}: interleaved audiobook (NL → EN → NL), {chapter}", "",
          "Planned and cut from the audio indexes only (no re-transcription).", ""]
     if build_stats:
         L.append(f"- MP3: `{name}.mp3`, {build_stats['seconds'] / 60:.1f} min. "
@@ -290,7 +290,7 @@ def main():
     units, stats = plan(nl, en, pairs(a.chapter, nl_sents, en_sents), risk_merge=not a.no_risk_merge,
                         runs=text_runs(a.chapter))
     units = clips(nl, en, units, nl_sents, en_sents)
-    out = WORK / a.chapter / "drill"
+    out = WORK / a.chapter / "interleaved"
     out.mkdir(parents=True, exist_ok=True)
     bstats = None if a.no_render else render(units, src["nl"]["local"], src["en"]["local"], out, name, a.gap)
     cov, left = coverage(nl, units)

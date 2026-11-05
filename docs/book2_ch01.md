@@ -1,13 +1,13 @@
-# HP2 ch. 1: NL→EN→NL drill from one audio pass (2026-10-24)
+# HP2 ch. 1: NL→EN→NL interleaved audiobook from one audio pass (2026-10-24)
 
 No book text in this file. Numbers are observed unless marked *(assumed)*.
 
 ## Goal
 
-A NL→EN→NL drill of book 2, chapter 1, in the format of the HP1 ch. 1 drill v3. Per unit: NL clip,
+An NL→EN→NL interleaved audiobook of book 2, chapter 1, in the format of the HP1 ch. 1 interleaved v3. Per unit: NL clip,
 1 s gap, EN clip, 1 s gap, NL clip, 1 s gap. Two constraints from the user:
 
-- **Least effort.** The audio is analysed once. After that the drill is planned and cut from the
+- **Least effort.** The audio is analysed once. After that the audiobook is planned and cut from the
   indexes, with no re-transcription of cut clips and no listening gate before delivery.
 - **Text match unknown.** The book-2 audiobooks may not follow the EPUB text on Drive. That is checked
   from the same pass.
@@ -17,8 +17,8 @@ A NL→EN→NL drill of book 2, chapter 1, in the format of the HP1 ch. 1 drill 
 - **Index cuts equal the verified cuts** to the millisecond.
 - **Index risk rules flag** 100 % of the EN and ~85 % of the NL clip defects that re-transcription found.
   The NL ones they miss are narrator words added right before a sentence, which whisper did not hear
-  either (2 of 13 NL edge defects in drill v3).
-- **The drill plans around risky boundaries.** It merges a unit with its neighbour when either:
+  either (2 of 13 NL edge defects in interleaved v3).
+- **The builder plans around risky boundaries.** It merges a unit with its neighbour when either:
   - a cut would go through speech (no pause ≥ 120 ms in both languages), or
   - an edge word at the cut has a CTC score < 0.3.
 
@@ -27,7 +27,7 @@ A NL→EN→NL drill of book 2, chapter 1, in the format of the HP1 ch. 1 drill 
 ```bash
 bash scripts/restore_state.sh ch01                       # HP1 state (regression) + HP1 inputs
 uv run python -m batkol.sources fetch b2ch01            # resolve book-2 globs, download audio + EPUBs
-uv run python -m batkol.drill ch01 --no-risk-merge --no-render --compare ~/work/ch01/units.json   # regression
+uv run python -m batkol.interleaved ch01 --no-risk-merge --no-render --compare ~/work/ch01/units.json   # regression
 uv run python -m batkol.edition ch01 nl                 # HP1 baseline match figures (seconds; optional)
 uv run python -m batkol.analyze b2ch01 nl --slice 60    # timing
 uv run python -m batkol.analyze b2ch01 nl               # whisper + emissions, then stops for the text check
@@ -36,8 +36,8 @@ uv run python -m batkol.analyze b2ch01 nl               # alignment, gap pass, i
 uv run python -m batkol.analyze b2ch01 en               # whisper, emissions, alignment, gap pass; stops for the text
 uv run python -m batkol.edition b2ch01 en
 uv run python -m batkol.analyze b2ch01 en               # book match, index
-uv run python -m batkol.drill b2ch01                    # ~/work/b2ch01/drill/hp2_ch01.{mp3,tsv}, _report.md
-bash scripts/publish.sh HP/book2 HP/meta/book2/b2ch01 ~/work/b2ch01/drill/*.{mp3,tsv,md} ~/work/b2ch01/edition_*.md
+uv run python -m batkol.interleaved b2ch01              # ~/work/b2ch01/interleaved/hp2_ch01.{mp3,tsv}, _report.md
+bash scripts/publish.sh HP/book2 HP/meta/book2/b2ch01 ~/work/b2ch01/interleaved/*.{mp3,tsv,md} ~/work/b2ch01/edition_*.md
 bash scripts/backup_state.sh
 ```
 
@@ -64,7 +64,7 @@ Run the full passes as harness-tracked background tasks.
 - **Decision.** The candidate with the most ok tokens is chosen:
   - `book`: ok + fuzzy ≥ 85 %. The text is force-aligned as is.
     - The runs go into `edition_nl.json`.
-    - `drill` merges every NL boundary within 0.5 s of a run (`nl_text_run`), so no cut lands where
+    - `interleaved` merges every NL boundary within 0.5 s of a run (`nl_text_run`), so no cut lands where
       the book's word timings are unreliable.
   - `reconcile`: NL with ok + fuzzy < 85 %. `analyze` refuses to align. A reconciliation step (align
     the spoken words in the runs) is not written, and is only needed if HP2 ends up here.
@@ -79,10 +79,10 @@ Run the full passes as harness-tracked background tasks.
     It was replaced before any HP2 data was seen.
 - **Report.** `edition_<lang>.md` holds book text, so it goes to Drive only, never to git.
 
-### Drill (`batkol/drill.py`)
+### Interleaved audiobook (`batkol/interleaved.py`)
 
 - **Units.** The LaBSE sentence groups (`pairs.json`, computed once).
-  - An NL sentence without an EN partner joins the previous unit, so every NL sentence is drilled.
+  - An NL sentence without an EN partner joins the previous unit, so every NL sentence is heard.
   - An EN sentence without an NL partner is left out, unless a merge puts it inside an EN clip.
 - **Cuts.**
   - NL: one cut at the longest pause between units, so a narrator addition joins a side.
@@ -95,11 +95,11 @@ Run the full passes as harness-tracked background tasks.
   - joined NL sentences and left-out EN sentences;
   - NL word coverage (target 100 %) and cuts inside speech (target 0);
   - units with index risks, with their MP3 timestamps (optional spot-check).
-- **Output.** `~/work/<chapter>/drill/`. The verified HP1 `~/work/ch01/units.json` is never overwritten.
+- **Output.** `~/work/<chapter>/interleaved/`. The verified HP1 `~/work/ch01/units.json` is never overwritten.
 
 ## Regression gate (HP1, no listening)
 
-`drill ch01 --no-risk-merge` against the verified drill v3 should give the same sentence groups, except
+`interleaved ch01 --no-risk-merge` against the verified interleaved v3 should give the same sentence groups, except
 where an NL-only sentence now joins a unit (v3 skipped those). Cut times should agree within 20 ms on
 ≥ 95 % of cuts. Expected sources of difference:
 - narrator additions are now inside the unit;
@@ -111,7 +111,7 @@ An unexplained difference must be fixed before HP2.
 
 ### Done (this session, code only: Drive was unreachable)
 
-- `sources.py`, `analyze.py`, `edition.py`, `drill.py`.
+- `sources.py`, `analyze.py`, `edition.py`, `interleaved.py`.
 - `index.build`, `pipeline.SRC` and `restore_state.sh` now take their paths from the registry.
 - `chapter.chapter1`: heading forms "Hoofdstuk een", "1 + title on the same line" and "— CHAPTER ONE —"
   are accepted. Bare digits are not, since OCR editions contain page numbers.
@@ -127,7 +127,7 @@ An unexplained difference must be fixed before HP2.
 - **`sources.fetch`** on a mock folder tree: the globs resolve nested book-2 folders, case-insensitive.
   Note: an unanchored rclone glob with a `/` inside matches nothing; a leading `**` is needed.
 - **Full chain on a TTS fixture** (own 11-sentence text, Piper NL `nathalie` + EN `alan`; EN with
-  "credits" before the heading): `analyze` → `edition` → `analyze` → `drill` ran end to end.
+  "credits" before the heading): `analyze` → `edition` → `analyze` → `interleaved` ran end to end.
   - The edition check found the one reworded sentence (ok 97.6 %).
   - The EN credits were left out of unit 0.
   - NL coverage 100 %, 0 cuts in speech.
@@ -152,12 +152,12 @@ An unexplained difference must be fixed before HP2.
   widen the clip (start earlier, end later): the EN rule now cuts at the outer pauses. NL max |Δ| 0.1 s.
 - **Timing (4 vCPU).** 60 s slice: whisper rtf 0.33, emissions rtf 0.25, model load 86 s (incl. the
   1.2 GB MMS_FA download). Full passes: NL whisper + emissions ~10 min, NL align + gap pass ~3 min,
-  EN ~9 min, drill with render 2.5 min.
+  EN ~9 min, interleaved audiobook with render 2.5 min.
 - **Text check.**
   - NL: ok 95.8 %, match 98.1 %, 1 run, 9 intro tokens (spoken credits) → `book`.
   - EN: ok 96.4 %, match 96.9 %, 2 runs → `book` (en_b2_a; en_b2_b within 0.1 pt).
 - **Indexes.** NL 2750 words (316 pause boundaries), EN 2520 words (474 pause boundaries).
-- **Drill** (`gdrive:batkol-out/HP/book2/hp2_ch01.mp3`; TSV and reports in `HP/meta/book2/b2ch01/`): 56.4 min,
+- **Interleaved audiobook** (`gdrive:batkol-out/HP/book2/hp2_ch01.mp3`; TSV and reports in `HP/meta/book2/b2ch01/`): 56.4 min,
   121 units from 173 sentence groups. Merges: nl_no_pause ×30, en_no_pause ×12, en_edge_score ×13,
   nl_edge_score ×1. NL coverage 100 %. No unpaired sentences. 11 units with index risks.
   - The one `cut_in_speech` flag is unit 0's EN start: the first word sits at the file edge, so the
@@ -168,8 +168,8 @@ An unexplained difference must be fixed before HP2.
 
 ### Not yet observed
 
-- Listening check of the HP2 drill.
+- Listening check of the HP2 interleaved audiobook.
 - Whether `chapter1` still extracts HP1 ch. 1 identically after the regex change. Check this by
   diffing against `~/work/text/en_a.ch01.txt` (the NL text is repaired, so it cannot be diffed).
-- Compute for HP2 *(assumed from HP1 rates)*: ~15 min NL, ~12 min EN, ~2 min drill render.
+- Compute for HP2 *(assumed from HP1 rates)*: ~15 min NL, ~12 min EN, ~2 min interleaved render.
   Model downloads took ~4 min here: whisper turbo, MMS_FA 1.2 GB, LaBSE.

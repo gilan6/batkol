@@ -8,6 +8,6 @@ cd "$HOME/work"
 rclone copy . gdrive:batkol-out/state/ \
   --include "index/**" --include "bank/**" --include "learner/**" --include "text/**" \
   --include "{ch,b?ch}*/*.json" --include "{ch,b?ch}*/*.jsonl" --include "{ch,b?ch}*/*.npy" --include "{ch,b?ch}*/*.npz" --include "{ch,b?ch}*/*.md" \
-  --include "{ch,b?ch}*/drill/*.json" --include "{ch,b?ch}*/drill/*.md" \
+  --include "{ch,b?ch}*/interleaved/*.json" --include "{ch,b?ch}*/interleaved/*.md" \
   --include "ch*/v1/**" --include "pims*/**" --include "lesson*/*.json" 2>&1 | grep -v NOTICE || true
 rclone size gdrive:batkol-out/state/ 2>&1 | grep -v NOTICE

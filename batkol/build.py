@@ -1,4 +1,4 @@
-"""Assemble NL -> EN -> NL drill audio and encode MP3."""
+"""Audio for every output (interleaved audiobook, lessons): cut clips, level them, limit and encode MP3."""
 import re
 import subprocess
 import tempfile

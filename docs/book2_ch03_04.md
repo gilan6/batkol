@@ -1,4 +1,4 @@
-# HP2 ch. 3 and 4: NL→EN→NL drills (2026-11-02)
+# HP2 ch. 3 and 4: NL→EN→NL interleaved audiobooks (2026-11-02)
 
 No book text in this file. Numbers are observed unless marked *(assumed)*.
 
@@ -21,7 +21,7 @@ cross-source leveling of `batkol/build.py`. Chapter 3 first, then chapter 4.
   session's uncommitted edits can't reach a long run. Chapter 3's NL whisper ran on `708ff56`, under
   `timeout 23m`, before the flags existed; every later step ran on `26c57c2`.
 - **Registry.** `b2ch03` and `b2ch04` are two more `hp2(...)` lines in `sources_local.py`.
-- **Memory in the render.** The first chapter-4 drill was killed by the OOM killer (7.2 GB resident of
+- **Memory in the render.** The first chapter-4 render was killed by the OOM killer (7.2 GB resident of
   WSL's 7.5 GB). Limiting the whole mix in one piece needs ~4.9x the mix in temporaries (measured on
   10- and 30-min mixes), and chapter 4's mix is 123 min, 1.3 GB as float32; chapter 3's 93 min had
   just fit. `build.limited` now limits the mix in 60 s blocks, each with more than the filters' reach
@@ -35,7 +35,7 @@ cross-source leveling of `batkol/build.py`. Chapter 3 first, then chapter 4.
 - **Slice (60 s of NL).** Whisper rtf 0.80, emissions rtf 0.42, models loaded in 60 s.
 - **NL whisper.** 18.9 min wall for 29.8 min of audio, 4787 words (the 23-min cap was not reached).
 - **NL text check.** ok 94.9 %, match 97.5 %, no spoken intro or outro → `book` (nl_b2_a). 7 runs of
-  2–5 book tokens where the narration words it differently (ch. 1: 1, ch. 2: 0); `drill` merges any NL
+  2–5 book tokens where the narration words it differently (ch. 1: 1, ch. 2: 0); `interleaved` merges any NL
   cut within 0.5 s of one.
 - **NL emissions, alignment, gap pass, index.** 17 min wall: emissions 12.2 min, alignment 1 s, gap
   pass 293 gaps in 21 windows (3 words kept). Alignment from the heading at 0.2 s to the last word at
@@ -48,13 +48,13 @@ cross-source leveling of `batkol/build.py`. Chapter 3 first, then chapter 4.
   gap pass 2.1 min (52 gaps in 5 windows, 0 words kept).
 - **EN index.** 4367 words (ok 4307, fuzzy 21, differs 35, added 4), 158 book tokens omitted by the
   cast, 1492 pause boundaries (34 % of boundaries; ch. 2: 20 %).
-- **Drill.** `gdrive:batkol-out/HP/book2/hp2_ch03.mp3`; TSV and reports in `HP/meta/book2/b2ch03/`.
+- **Interleaved audiobook.** `gdrive:batkol-out/HP/book2/hp2_ch03.mp3`; TSV and reports in `HP/meta/book2/b2ch03/`.
   - 92.7 min, 214 units from 323 sentence groups (6 min). Merges: nl_no_pause ×43, en_no_pause ×26,
     en_edge_score ×34, nl_edge_score ×14, nl_text_run ×7.
   - NL word coverage 100 %. Cuts inside speech: 0. 27 units with index risks, not listened to.
   - Two NL sentences (two short interjections) play with no EN after them: the cast never speaks their EN
     lines (whisper heard nothing in the 3 s there but one 0.4 s sound, and the index lists all their
-    book words as omitted). So `drill` joined the NL to the previous unit and left the EN out, as
+    book words as omitted). So `interleaved` joined the NL to the previous unit and left the EN out, as
     designed; the report lists them under "no EN audio found".
 - **Levels.** Whole file −18.7 LUFS, peak −0.9 dBFS. NL median −19.7 LUFS (p10 −21.5, p90 −16.0),
   EN −18.4 (−19.8, −16.7): NL − EN −1.3 dB (ch. 2: −0.6). Gains NL +5.0 dB, EN −0.5 dB. The source gain
@@ -83,7 +83,7 @@ cross-source leveling of `batkol/build.py`. Chapter 3 first, then chapter 4.
   gap pass 3.8 min: 65 gaps in 6 windows, 2 words kept).
 - **EN index.** 5683 words (ok 5558, fuzzy 39, differs 81, added 5), 119 book tokens omitted by the
   cast, 1084 pause boundaries.
-- **Drill.** `gdrive:batkol-out/HP/book2/hp2_ch04.mp3`; TSV and reports in `HP/meta/book2/b2ch04/`.
+- **Interleaved audiobook.** `gdrive:batkol-out/HP/book2/hp2_ch04.mp3`; TSV and reports in `HP/meta/book2/b2ch04/`.
   - 123.1 min, 266 units from 388 sentence groups (2 min on `4ded078`; the first try ran out of memory,
     see above). Merges: nl_no_pause ×59, en_no_pause ×29, en_edge_score ×30, nl_edge_score ×9,
     nl_text_run ×9. No unpaired sentences.
@@ -104,7 +104,7 @@ cross-source leveling of `batkol/build.py`. Chapter 3 first, then chapter 4.
 | ch. 3 | 29.8 min | 92.7 min | 214 | 0 | 27 | −1.3 dB | −18.7 LUFS |
 | ch. 4 | 39.4 min | 123.1 min | 266 | 1 (file edge) | 46 | −0.9 dB | −18.6 LUFS |
 
-Compute on the laptop: chapter 3 about 75 min from fetch to drill, chapter 4 about 95 min (in steps
+Compute on the laptop: chapter 3 about 75 min from fetch to the finished MP3, chapter 4 about 95 min (in steps
 of at most 19 min).
 
 ## Not yet observed

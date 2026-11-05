@@ -56,7 +56,7 @@ def main(run_dir, name):
     margins = cut_margins(units)
     defects = compute_defects(units, ver, margins)
     (d / "defects.json").write_text(json.dumps(defects, indent=1))
-    L = [f"# {name}: NL → EN → NL drill, HP1 chapter 1", ""]
+    L = [f"# {name}: interleaved audiobook (NL → EN → NL), HP1 chapter 1", ""]
     L.append(f"- MP3: `{name}.mp3`, {build['seconds'] / 60:.1f} min, {build['units']} units "
              f"(of {len(units)} groups; the rest are unpaired, TSV only). Gain NL {build['gain_nl']:+} dB, EN {build['gain_en']:+} dB.")
     L.append(f"- Group shapes NL:EN: " + ", ".join(f"{k} ×{v}" for k, v in shapes.most_common()))

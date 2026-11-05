@@ -7,7 +7,7 @@ No book text in this file. Facts are observed in the repo, the docs or earlier s
 
 | Product | Code | State (2026-11-03) |
 |---|---|---|
-| (a) NL→EN→NL chapter drill: per unit, NL clip, 1 s, EN clip, 1 s, NL clip, 1 s | `drill.py` (index-only); `pipeline.py` is the legacy HP1 builder | HP1 ch. 1 v3 in `batkol-out/HP/book1/`; HP2 ch. 1 (56.4 min, 121 units; user: good), ch. 2 (65.6 min, 136 units), ch. 3 (92.7 min, 214 units) and ch. 4 (123.1 min, 266 units) in `batkol-out/HP/book2/`; ch. 2–4 leveled, not yet listened to |
+| (a) Interleaved audiobook (NL→EN→NL): per unit, NL clip, 1 s, EN clip, 1 s, NL clip, 1 s | `interleaved.py` (index-only); `pipeline.py` is the legacy HP1 builder | HP1 ch. 1 v3 in `batkol-out/HP/book1/`; HP2 ch. 1 (56.4 min, 121 units; user: good), ch. 2 (65.6 min, 136 units), ch. 3 (92.7 min, 214 units) and ch. 4 (123.1 min, 266 units) in `batkol-out/HP/book2/`; ch. 2–4 leveled, not yet listened to |
 | (b) Pimsleur-style lessons: frame + EN cue, pause, narrator, repeat; buildup; recalls; reviews from learner state | `lesson.py`, `learner.py`, `clipbank.py`, specs in `batkol/lessons/` | HP1 ch. 1, lessons 1–7 (units 1–27; 6 and 7 leveled). Lesson 8 starts at U28a; `lesson06.json` holds U28a–U30a as untaught candidates |
 
 Shared flow (`docs/flow_v2.md`): **analyze** (whisper large-v3-turbo int8 + MMS_FA CTC + gap pass)
@@ -30,10 +30,10 @@ Shared flow (`docs/flow_v2.md`): **analyze** (whisper large-v3-turbo int8 + MMS_
 ### Open work carried over
 
 From `docs/flow_v2.md` §4, `docs/book2_ch01.md` and `docs/book2_ch02.md` (updated 2026-10-31):
-1. Listening lists of lessons 2–7: 114 clips pending (lesson 1: 11 of 11 passed). HP2 ch. 1 drill:
+1. Listening lists of lessons 2–7: 114 clips pending (lesson 1: 11 of 11 passed). HP2 ch. 1 audiobook:
    good (user, 2026-10-31); ch. 2: not listened to.
 2. Lesson 8 onward (HP1 ch. 1 from U28a).
-3. Port the HP1 ch. 1 drill to the index; remove per-clip verification from `pipeline.py`.
+3. Port the HP1 ch. 1 interleaved audiobook to the index; remove per-clip verification from `pipeline.py`.
 4. NL narrator additions right before a sentence. Stopped after two failed fixes. Next test: gap plus the first 1–2 s of speech.
 5. More chapters, which need a registry entry each in `sources_local.py` (book 2: one helper builds
    them). A book's last chapter is not supported yet: it has no next heading.
@@ -94,7 +94,7 @@ Disk breakdown (sizes *(assumed)* unless stated):
 6. **Verify. Nothing here changes learner state.**
    - `uv run python -m batkol.index nl_ch01 en_ch01 pims_L01` should rebuild the indexes from caches in seconds.
    - Regression gate (from `docs/book2_ch01.md`):
-     `uv run python -m batkol.drill ch01 --no-risk-merge --no-render --compare ~/work/ch01/units.json`.
+     `uv run python -m batkol.interleaved ch01 --no-risk-merge --no-render --compare ~/work/ch01/units.json`.
      Expect 239/239 groups and ≥ 95 % of cuts within 20 ms (cloud: 95.3 %).
    - Laptop speed: `uv run python -m batkol.analyze b2ch01 nl --slice 60`. Cloud reference: whisper
      rtf 0.33, emissions rtf 0.25. Plan run lengths from this number.
@@ -221,4 +221,4 @@ Disk breakdown (sizes *(assumed)* unless stated):
 1. §4 setup and the verification gate. Then commit the CPU lock.
 2. §5 repo changes (`CLAUDE.md` is already updated for the laptop).
 3. Carried-over listening (lesson lists 2–7, HP2 ch. 2). Their verdicts gate the cut rules that 50L reuses.
-4. F0–F3 (50languages), in parallel with HP lessons 8+ and new chapter drills, which are now overnight batch jobs.
+4. F0–F3 (50languages), in parallel with HP lessons 8+ and new interleaved chapters, which are now overnight batch jobs.
