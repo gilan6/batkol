@@ -5,9 +5,9 @@ No book text in this file. Facts are observed in the repo, the docs or earlier s
 
 ## 1. What the project does now
 
-| Product | Code | State (2026-11-03) |
+| Product | Code | State (2026-11-05) |
 |---|---|---|
-| (a) Interleaved audiobook (NL→EN→NL): per unit, NL clip, 1 s, EN clip, 1 s, NL clip, 1 s | `interleaved.py` (index-only); `pipeline.py` is the legacy HP1 builder | HP1 ch. 1 v3 in `batkol-out/HP/book1/`; HP2 ch. 1 (56.4 min, 121 units; user: good), ch. 2 (65.6 min, 136 units), ch. 3 (92.7 min, 214 units) and ch. 4 (123.1 min, 266 units) in `batkol-out/HP/book2/`; ch. 2–4 leveled, not yet listened to |
+| (a) Interleaved audiobook (NL→EN→NL): per unit, NL clip at 0.8× (pitch kept), 1 s, EN clip, 1 s, NL clip, 1 s (`--speeds`, `docs/interleaved_speed.md`) | `interleaved.py` (index-only); `pipeline.py` is the legacy HP1 builder | HP1 ch. 1 v3 in `batkol-out/HP/book1/`; HP2 ch. 1 (56.4 min, 121 units; user: good), ch. 2 (65.6 min, 136 units), ch. 3 (92.7 min, 214 units) and ch. 4 (132.5 min, 266 units; rebuilt 2026-11-05 with the first NL play at 0.8×) in `batkol-out/HP/book2/`; HP1 ch. 1 and HP2 ch. 1–3 in the earlier layout (every play at normal speed); ch. 2–4 leveled, not yet listened to |
 | (b) Pimsleur-style lessons: frame + EN cue, pause, narrator, repeat; buildup; recalls; reviews from learner state | `lesson.py`, `learner.py`, `clipbank.py`, specs in `batkol/lessons/` | HP1 ch. 1, lessons 1–7 (units 1–27; 6 and 7 leveled). Lesson 8 starts at U28a; `lesson06.json` holds U28a–U30a as untaught candidates |
 
 Shared flow (`docs/flow_v2.md`): **analyze** (whisper large-v3-turbo int8 + MMS_FA CTC + gap pass)

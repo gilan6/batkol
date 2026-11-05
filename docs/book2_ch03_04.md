@@ -93,7 +93,10 @@ cross-source leveling of `batkol/build.py`. Chapter 3 first, then chapter 4.
   - The sentence the narrator skips lies inside unit 76 (NL sentences 112–115, merged: no pause), so no
     cut falls where its squeezed tokens are.
   - 46 units with index risks, not listened to (NL start word added ×17 the most common).
-- **Levels.** Whole file −18.6 LUFS, peak −0.8 dBFS. NL median −19.6 LUFS (p10 −21.5, p90 −15.8),
+  - **Rebuilt 2026-11-05** with the first NL play at 0.8× (`docs/interleaved_speed.md`): 132.5 min, same
+    units and cuts. The build described here (every play at normal speed) is in `HP/archive/` as
+    `hp2_ch04_2026-11-03.mp3`, `.tsv` and `_report.md`.
+- **Levels** (2026-11-03 build). Whole file −18.6 LUFS, peak −0.8 dBFS. NL median −19.6 LUFS (p10 −21.5, p90 −15.8),
   EN −18.7 (−19.5, −16.5): NL − EN −0.9 dB. Gains NL +5.0 dB, EN +0.2 dB.
 
 ## Summary
@@ -103,6 +106,7 @@ cross-source leveling of `batkol/build.py`. Chapter 3 first, then chapter 4.
 | ch. 2 | 21.0 min | 65.6 min | 136 | 0 | 15 | −0.6 dB | −18.5 LUFS |
 | ch. 3 | 29.8 min | 92.7 min | 214 | 0 | 27 | −1.3 dB | −18.7 LUFS |
 | ch. 4 | 39.4 min | 123.1 min | 266 | 1 (file edge) | 46 | −0.9 dB | −18.6 LUFS |
+| ch. 4, first NL at 0.8× (2026-11-05) | 39.4 min | 132.5 min | 266 | 1 (file edge) | 46 | −0.7 dB (first NL), −0.9 dB (second) | −18.5 LUFS |
 
 Compute on the laptop: chapter 3 about 75 min from fetch to the finished MP3, chapter 4 about 95 min (in steps
 of at most 19 min).

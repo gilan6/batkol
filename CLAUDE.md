@@ -58,7 +58,8 @@ See `docs/flow_v2.md` for the reasons, with data, and the status.
    Pure computation on indexes; no ASR.
 3. **Cut and render:** index lookups plus ffmpeg (`batkol/lesson.py`). Lessons continue in chapter
    order. Reviews come from the learner state (`batkol/learner.py`, `~/work/learner/state.json`;
-   one lesson per day assumed).
+   one lesson per day assumed). The interleaved audiobook (`batkol/interleaved.py`) plays each unit
+   NL slowed to 0.8× with the pitch kept (`build.atempo`), then EN, then NL at normal speed.
    Levels (`batkol/build.py`): every source to -18 LUFS; an utterance more than 3 dB off is pulled
    back (by at most 6 dB); a -1 dBFS look-ahead limiter on the final mix.
 4. **QA:** listening verdicts (gate builds) and sampled re-transcription (measures the
@@ -78,6 +79,8 @@ uv run python -m batkol.analyze b2ch02 nl               # emissions + alignment 
 # Longer chapters, so no run passes 25 min: --asr-minutes 15 (rerun until whisper is done), then
 # --stop-after emissions, then the plain run (alignment, gap pass, index).
 uv run python -m batkol.interleaved b2ch02              # leveled MP3/TSV/report from the indexes (~5 min, no ASR)
+# Per unit: NL at 0.8x (pitch kept), 1 s, EN, 1 s, NL, 1 s. --speeds 1,1,1 plays all three at normal speed
+# (first NL, EN, second NL; each 0.5-2; docs/interleaved_speed.md).
 bash scripts/publish.sh HP/book2 HP/meta/book2/b2ch02 ~/work/b2ch02/interleaved/*.{mp3,tsv,md} ~/work/b2ch02/edition_*.md
 uv run python -m batkol.index nl_ch01 en_ch01 pims_L01                 # (re)build indexes from caches (seconds)
 uv run python -m batkol.lesson view 7 12                                # pause chunks + book ranges for item selection
