@@ -1,8 +1,6 @@
 # Batkol
 
-Formerly `hp-dutch-drills`: package `hpdrill`, Drive folders `hp-nl` and `hp-nl-out` (renamed 2026-10-27).
 The interleaved audiobook was called "drill" (`batkol/drill.py`, `~/work/<chapter>/drill/`) until 2026-11-05.
-Older logs, reports and Drive output files may still name the old paths.
 
 Pimsleur-style Dutch pronunciation drills cut from Harry Potter audiobooks (book 1; book 2 started).
 - Dutch: one narrator, Jan Meng.
