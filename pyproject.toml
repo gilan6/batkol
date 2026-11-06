@@ -21,7 +21,7 @@ dependencies = [
 
 [tool.uv]
 # Locked for the laptop (WSL2 Ubuntu, x86_64, no GPU): torch and torchaudio come from
-# the PyTorch CPU index, so no CUDA or triton wheels (docs/local_plan.md §6).
+# the PyTorch CPU index, so no CUDA or triton wheels (docs/setup.md).
 environments = ["sys_platform == 'linux' and platform_machine == 'x86_64'"]
 
 [tool.uv.sources]

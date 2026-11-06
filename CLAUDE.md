@@ -1,17 +1,14 @@
 # Batkol
 
-The interleaved audiobook was called "drill" (`batkol/drill.py`, `~/work/<chapter>/drill/`) until 2026-11-05.
-
-Pimsleur-style Dutch pronunciation drills cut from Harry Potter audiobooks (book 1; book 2 started).
+Pimsleur-style Dutch lessons and interleaved audiobooks, cut from the Harry Potter audiobooks:
 - Dutch: one narrator, Jan Meng.
 - English: Audible full cast.
 - Instruction phrases ("frames"): Pimsleur Dutch I.
 
 ## Privacy (this repo is public)
 
-- Anything about the user, their machine or accounts goes in `private/`, never in a tracked file.
-  `private/` is git-ignored here and tracked only in a private repo. Files are copied from this repo
-  to the private one, never back.
+- Anything about the user, their machine or accounts goes in `private/` (git-ignored), never in a tracked
+  file. Commit messages are public too.
 - Git hooks block personal data in commits and pushes. Enable them once per clone:
   `git config core.hooksPath scripts/hooks`. Never bypass them: fix the hit or ask the user.
 - Rewriting public history needs the user's OK.
@@ -20,10 +17,9 @@ Private notes, where present: @private/CLAUDE.md
 
 ## Where it runs
 
-The user's laptop: Windows 11 + WSL2 Ubuntu, x86_64, 16 GB RAM, no GPU. Everything runs on CPU.
-Setup, verification and open decisions: `docs/local_plan.md`.
-- The repo (`~/batkol`) and `~/work` live in the WSL filesystem, never under `/mnt` (slow).
-- `~/work` persists between sessions. Seed it once from Drive (`docs/local_plan.md` §4):
+Linux or WSL2 (x86_64), CPU only, 16 GB RAM. Setup and verification: `docs/setup.md`.
+- The repo and `~/work` live in the Linux filesystem, never under `/mnt` (slow).
+- `~/work` persists between sessions. Seed it once from Drive:
   ```bash
   bash scripts/restore_state.sh [chapter ...]   # ~/work from gdrive:batkol-out/state + inputs from gdrive:batkol
                                                 # (chapter ids in batkol/sources_local.py; default ch01)
@@ -32,8 +28,7 @@ Setup, verification and open decisions: `docs/local_plan.md`.
 - Drive: `gdrive:` is an rclone remote for Google Drive. It is slow: never a working directory; inputs are
   copied to `~/work` first. Write only inside `gdrive:batkol-out/`; `gdrive:batkol/` is read-only input.
   Never delete anything on Drive.
-- WSL stops when Windows sleeps. Before a long run, ask the user to keep the laptop plugged in and awake.
-- Cloud sessions are retired: their proxy blocks `download-r2.pytorch.org` (CPU torch wheels) and 50languages.com.
+- Long runs need the machine awake: WSL stops when Windows sleeps.
 
 ## Where things live
 
@@ -41,7 +36,7 @@ Setup, verification and open decisions: `docs/local_plan.md`.
 |---|---|---|
 | Code, docs, lesson specs (book-token ranges, no text) | this repo | yes |
 | Inputs: audiobooks, EPUBs, Pimsleur | `gdrive:batkol/` (read-only); paths in `batkol/sources_local.py` (git-ignored; template `sources_local.example.py`) | never |
-| State: indexes, stage caches, clip bank, repaired text | `~/work` (laptop), backed up to `gdrive:batkol-out/state/` | never |
+| State: indexes, stage caches, clip bank, repaired text | `~/work`, backed up to `gdrive:batkol-out/state/` | never |
 | Audio for listening (audio files only) | `gdrive:batkol-out/HP/{lessons,book1,book2}/`, `gdrive:batkol-out/50l/lessons/` | never |
 | Their metadata: sidecar JSON, TSV, reports, READMEs | `gdrive:batkol-out/HP/meta/` and `50l/meta/`, one folder per lesson or chapter | never |
 
@@ -49,8 +44,8 @@ Setup, verification and open decisions: `docs/local_plan.md`.
 - Put outputs on Drive with `bash scripts/publish.sh AUDIO_DIR META_DIR FILE...`: audio files go to
   AUDIO_DIR, every other file to META_DIR, so the audio folders never hold anything else.
 - After any costly step (audio pass, model pass, lesson build, verdicts), run `bash scripts/backup_state.sh`.
-  It saves every costly byproduct to `gdrive:batkol-out/state/` (a user-approved target). The laptop
-  disk is the only live copy, so this is the off-site backup. Never recompute what is already in `~/work`.
+  It saves every costly byproduct to `gdrive:batkol-out/state/`. The local disk is the only live copy,
+  so this is the off-site backup. Never recompute what is already in `~/work`.
 
 ## Flow v2: one analysis pass per source, then only planning and cutting
 
@@ -77,12 +72,12 @@ See `docs/flow_v2.md` for the reasons, with data, and the status.
 ## Commands
 
 ```bash
-# A new chapter's interleaved audiobook (docs/book2_ch01.md, _ch02.md, _ch03_04.md): one audio pass per source,
+# A new chapter's interleaved audiobook: one audio pass per source,
 # then cutting only. Register it in batkol/sources_local.py; the id's ch<number> picks the EPUB chapter.
-# Laptop: BATKOL_THREADS=6, and each run appended to ~/work/logs/<chapter>.log (live bars: tail -f).
+# BATKOL_THREADS = physical cores (default 4); append each run to ~/work/logs/<chapter>.log (live bars: tail -f).
 uv run python -m batkol.sources fetch b2ch02            # resolve Drive paths, download audio + EPUBs
 uv run python -m batkol.analyze b2ch02 nl --slice 60    # time a slice first (working rule)
-uv run python -m batkol.analyze b2ch02 nl --stop-after asr   # whisper (~14 min for a 21-min chapter)
+uv run python -m batkol.analyze b2ch02 nl --stop-after asr   # whisper (~0.7x the audio length on 6 cores)
 uv run python -m batkol.edition b2ch02 nl               # audiobook vs EPUB(s): picks the text, decides book|reconcile|stop
 uv run python -m batkol.analyze b2ch02 nl               # emissions + alignment + gap pass + index (same for en)
 # Longer chapters, so no run passes 25 min: --asr-minutes 15 (rerun until whisper is done), then
@@ -107,7 +102,7 @@ uv run python -m batkol.clipbank verdict2 ~/work/bank/spans.jsonl <span_id> pass
   verified) and its stage caches, which the HP1 indexes read. New chapters use `analyze` + `interleaved`;
   per-clip verification is not part of the flow any more.
 
-## Working rules (from the user)
+## Working rules
 
 - Plan first. Time a 1-minute slice before any full run.
 - Keep every long step ≤ 25 min and resumable. Run it as a harness-tracked background

@@ -62,7 +62,7 @@ https://github.com/user-attachments/assets/d67a66dc-70d7-4142-824a-1b0411acc359
 
 The same lesson pattern, built from 50languages. Each Dutch sentence comes from two
 speakers, and you repeat after both. How the source is laid out, and how lessons are built
-from it, is in `docs/local_plan.md` §7.
+from it, is in `docs/fiftylang.md`.
 
 https://github.com/user-attachments/assets/cabad96b-aea8-46d7-b5a7-bf93f8a671c9
 
@@ -85,7 +85,7 @@ ignores; start from `batkol/sources_local.example.py`.
 
 Open the repo in Claude Code and ask in plain words, for example:
 
-- "Set up this laptop from docs/local_plan.md."
+- "Set up this machine from docs/setup.md."
 - "Add chapter 2 of book 1 and build its interleaved audiobook."
 - "Build lesson 6."
 - "Listening list for lesson 6: 3 and 7 sound clipped."

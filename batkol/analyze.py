@@ -4,7 +4,7 @@
   python -m batkol.analyze <chapter> nl|en --slice 60  # time a 60 s slice first (writes no cache)
   python -m batkol.analyze <chapter> nl|en --stop-after asr|emissions [--asr-minutes 15]
       # steps under 25 min: end the run after that stage; whisper starts no 5-min window after
-      # 15 min (rerun to continue). Laptop: a 21-min chapter in 2 runs, a 39-min one in 4
+      # 15 min (rerun to continue). On 6 cores: a 21-min chapter in 2 runs, a 39-min one in 4
 Threads: BATKOL_THREADS (default 4). Progress bars go to stderr; log the run and tail -f it.
 
 Stages, cached in ~/work/<chapter>/ and skipped when present:

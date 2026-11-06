@@ -4,7 +4,7 @@ No book text in this file. Numbers are observed in this session unless marked *(
 
 ## 1. Why the flow changed
 
-The user's point: sound files should be analysed once, with everything needed logged.
+The principle: analyse each sound file once and log everything needed.
 After that, all work is planning and cutting. The data agrees.
 
 ### Cost: per-clip re-checks vs one pass

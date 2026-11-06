@@ -29,7 +29,7 @@ uv run python -m batkol.interleaved b2ch04 --speeds 1,1,1     # every play at no
 ## How the method and the speed were chosen
 
 An experiment in a folder outside the repo (deleted afterwards), on the first sentences of HP2 ch. 2.
-Every sample was leveled to −18 LUFS, and the user chose by ear.
+Every sample was leveled to −18 LUFS, and the choice was made by ear.
 
 | Method | How it stretches | Result |
 |---|---|---|
@@ -38,7 +38,7 @@ Every sample was leveled to −18 LUFS, and the user chose by ear.
 | Praat PSOLA ("Lengthen (overlap-add)") | repeats whole voice periods | pitch kept |
 | ffmpeg `atempo` | time-domain overlap-add (WSOLA-like) | pitch kept; **chosen** |
 
-- **What the user heard, in order.**
+- **What was compared, in order.**
   1. The chapter's first 12 units in the interleaved layout, both NL plays slowed by rubberband to 0.9×
      and 0.8×: metallic.
   2. One sentence at 0.9× and 0.8× by each stretcher.
@@ -54,7 +54,7 @@ Every sample was leveled to −18 LUFS, and the user chose by ear.
   play, i.e. 0.52 s per minute of Dutch, 73 ms per clip, mostly starting ffmpeg. One continuous 60 s
   piece takes 0.24 s. The audio analysis is not affected.
 
-## Chapter 4 rebuilt (laptop)
+## Chapter 4 rebuilt
 
 - **Run.** `python -m batkol.interleaved b2ch04` from a snapshot of `8ff98cb`: 3.1 min wall, peak memory
   3.0 GB (at `--speeds 1,1,1`: 2.6 min, 2.7 GB).
@@ -66,13 +66,8 @@ Every sample was leveled to −18 LUFS, and the user chose by ear.
 - **Levels** per play (LUFS): first NL median −19.4 (p10 −21.3, p90 −15.6), EN −18.7 (−19.5, −16.5),
   second NL −19.6 (−21.5, −15.8). The slowed play measures a median 0.2 dB above the second play of the
   same unit (p10 0.0, p90 +0.35). Whole file −18.5 LUFS (was −18.6), true peak −0.8 dBTP.
-- **On Drive.** `HP/book2/hp2_ch04.mp3`, TSV and report in `HP/meta/book2/b2ch04/`. The 2026-11-03
-  build (every play at normal speed) is in `HP/archive/` as `hp2_ch04_2026-11-03.mp3`, `.tsv` and
-  `_report.md`.
 
 ## Not covered
 
 - Speeds above 1 were neither heard nor measured; speeds other than 0.75×, 0.8× and 0.9× were not heard.
   The code path is the same for every speed, but listen to a one-sentence sample before a whole chapter.
-- Chapters 1–3 of book 2 and HP1 ch. 1 stay in the earlier layout (every play at normal speed).
-- No listening check of the rebuilt chapter 4 yet.
