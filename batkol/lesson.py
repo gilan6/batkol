@@ -8,6 +8,8 @@ Per item: Pimsleur frame + EN cue -> pause (say it in Dutch) -> NL narrator ->
 pause (repeat); long items get backward buildup (suffixes of the narrator's
 phrase); recalls at +5 s, +25 s, +2 min, +10 min; recombination of adjacent
 taught items; passage at start and end.
+Pauses scale with the narrator's clip: reaction time plus PACE x its length, no upper
+limit. The first play of a new item or part is slowed (FIRST_SPEED, pitch kept).
 
 Clip gating uses index risks (cut not in a pause, unreliable edge-word
 alignment) and the user's listening verdicts (clip bank); builds never run ASR.
@@ -35,6 +37,10 @@ DUE_SLACK = 8  # a recall due this soon goes before the next new item (keeps the
 GAP = 0.6
 CHUNK_PAUSE = 0.15
 MIN_PAUSE = 0.12
+REACT_SAY = 2.0     # s to recall the Dutch from the English cue, before speaking
+REACT_REPEAT = 1.0  # s before repeating what was just heard
+PACE = 1.3          # learner speaking time per second of narrator speech
+FIRST_SPEED = 0.8   # first play of a new item or part; the spec's "first_play_speed" overrides
 # onset quality for a cut inside speech: stop/fricative onsets hide the cut best
 GOOD_ONSET = set("pbtdkgfvszhc")
 OKAY_ONSET = set("mnlrwj")
@@ -44,11 +50,15 @@ VOICE = WORK / "tts/en_GB-alan-medium.onnx"
 
 
 def ant_pause(d):
-    return float(np.clip(1.6 * d, 2.5, 9.0))
+    """Silence after an English cue (say it in Dutch) for a narrator clip of d s: recall time plus speaking it
+    at learner pace, no upper limit (capped at 9 s, long items got too little time). The GAP after every
+    clip counts toward it."""
+    return max(3.1, REACT_SAY + PACE * d) - GAP
 
 
 def rep_pause(d):
-    return float(np.clip(1.2 * d, 1.8, 7.0))
+    """Silence after the narrator (repeat it): reaction time plus speaking at learner pace, no upper limit."""
+    return max(2.4, REACT_REPEAT + PACE * d) - GAP
 
 
 class Sources:
@@ -318,8 +328,8 @@ def gate(src, bank, items, sents, frames):
 
 # ---- scheduler ----
 
-def seg(clip, kind, item=None):
-    return dict(clip=clip, kind=kind, item=item)
+def seg(clip, kind, item=None, speed=1.0):
+    return dict(clip=clip, kind=kind, item=item, **({"speed": speed} if speed != 1 else {}))
 
 
 def sil(d):
@@ -329,17 +339,18 @@ def sil(d):
 def dur(c):
     if "silence" in c:
         return c["silence"]
-    c = c["clip"]
+    speed, c = c.get("speed", 1.0), c["clip"]
     if c["src"] == "tts":
         with wave.open(c["path"]) as w:
-            return w.getnframes() / w.getframerate()
-    return c["end"] - c["start"]
+            return w.getnframes() / w.getframerate() / speed
+    return (c["end"] - c["start"]) / speed
 
 
-def intro_block(it, frames, first):
+def intro_block(it, frames, first, slow=1.0):
+    """slow: speed of the narrator's first play (new items; 1 for recombinations)."""
     d = it["nl"]["end"] - it["nl"]["start"]
     b = [seg(frames["how"], "frame"), sil(0.3), seg(it["en"], "en_cue", it["id"]), sil(ant_pause(d)),
-         seg(it["nl"], "nl_target", it["id"]), sil(rep_pause(d))]
+         seg(it["nl"], "nl_target", it["id"], slow), sil(rep_pause(d / slow))]
     if it["pieces"]:
         b += [seg(frames["repeat"], "frame"), sil(0.5)]
         for p in it["pieces"]:
@@ -357,11 +368,12 @@ def recall_block(it, frames, level):
             seg(it["nl"], "nl_target", it["id"]), sil(rep_pause(d))]
 
 
-def part_block(pt, frames):
-    """First drill of a part: cue -> say it -> narrator -> repeat, twice."""
+def part_block(pt, frames, slow=1.0):
+    """First drill of a part: cue -> say it -> narrator (at `slow`) -> repeat -> narrator -> repeat."""
     d = pt["nl"]["end"] - pt["nl"]["start"]
     return [seg(frames["how"], "frame"), sil(0.3), seg(pt["en"], "en_cue", pt["id"]), sil(ant_pause(d)),
-            seg(pt["nl"], "nl_target", pt["id"]), sil(rep_pause(d)), seg(pt["nl"], "nl_target", pt["id"]),
+            seg(pt["nl"], "nl_target", pt["id"], slow), sil(rep_pause(d / slow)),
+            seg(pt["nl"], "nl_target", pt["id"]),
             sil(rep_pause(d))]
 
 
@@ -406,7 +418,7 @@ def combos(src, items, max_nl_s=10.0):
     return out
 
 
-def schedule(items, sents, frames, passage, k, combo=(), reviews=()):
+def schedule(items, sents, frames, passage, k, combo=(), reviews=(), first_speed=1.0):
     """Greedy timeline: due recalls first, otherwise the next new item.
     reviews (items from earlier lessons): recalled right after the opening
     passage and again ~10 min later. Long material (with parts, or longer than
@@ -446,13 +458,13 @@ def schedule(items, sents, frames, passage, k, combo=(), reviews=()):
         else:
             kind, it, first = queue.pop(0)
             if kind == "part":
-                b, levels, mode = part_block(it, frames), PART_INTERVALS, "cue"
+                b, levels, mode = part_block(it, frames, first_speed), PART_INTERVALS, "cue"
             elif kind == "whole":
                 b, levels, mode = whole_block(it, frames), WHOLE_INTERVALS, "repeat"
             elif kind == "sentence" and it.get("long"):
                 b, levels, mode = repeat_block(it, frames), INTERVALS[2:3], "repeat"
             else:
-                b = intro_block(it, frames, first)
+                b = intro_block(it, frames, first, first_speed if kind == "intro" else 1.0)
                 levels = INTERVALS if kind == "intro" else INTERVALS[2:3]
                 mode = "repeat" if it.get("long") else "cue"
             end = t + block_len(b)
@@ -489,18 +501,22 @@ def render(src, timeline, out, name):
         xs, g = build.match_loudness([cache[k] for k in keys], weights=[heard[k] for k in keys])
         cache.update(zip(keys, xs))
         gains[s] = round(g, 1)
+    for c in timeline:  # slowed plays, stretched after leveling (pitch kept)
+        if c.get("speed", 1.0) != 1.0 and (c["clip"]["id"], c["speed"]) not in cache:
+            cache[(c["clip"]["id"], c["speed"])] = build.atempo(cache[c["clip"]["id"]], c["speed"])
     parts, pos, sidecar = [], 0, []
     gap = np.zeros(int(GAP * build.OUT_SR), np.float32)
     for c in timeline:
         if "silence" in c:
             x = np.zeros(int(c["silence"] * build.OUT_SR), np.float32)
         else:
-            cl = c["clip"]
-            x = np.concatenate([cache[cl["id"]], gap])
+            cl, speed = c["clip"], c.get("speed", 1.0)
+            x = np.concatenate([cache[(cl["id"], speed) if speed != 1.0 else cl["id"]], gap])
             sidecar.append(dict(t=round(pos / build.OUT_SR, 2), kind=c["kind"], item=c["item"], source=cl["src"],
                                 clip_id=cl["id"], file=src.idx[cl["src"]].drive_path if cl["src"] in src.idx
                                 else "piper:" + cl["text"], start=cl.get("start"), end=cl.get("end"),
-                                risk=cl.get("risk", []), start_kind=cl.get("start_kind")))
+                                risk=cl.get("risk", []), start_kind=cl.get("start_kind"),
+                                **({"speed": speed} if speed != 1.0 else {})))
         parts.append(x)
         pos += len(x)
     build.encode_mp3(np.concatenate(parts), out / f"{name}.mp3")
@@ -612,7 +628,9 @@ def uncovered(src, learner, chapter):
     return gaps
 
 
-def main(spec_path, out, name=None):
+def main(spec_path, out, name=None, items_k=None, record=True):
+    """items_k: exactly the first k candidate items, not as many as fit the spec's minutes.
+    record=False: no learner state and no listening-bank entries (rebuilding an earlier lesson)."""
     from .learner import Learner
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
@@ -630,13 +648,14 @@ def main(spec_path, out, name=None):
     dropped += r_dropped
     sent_spans = {s["nl"]["id"] for s in sents}
     combo = [c for c in combos(src, items) if c["nl"]["id"] not in sent_spans]  # same span as a sentence drill
+    first_speed = spec.get("first_play_speed", FIRST_SPEED)
     best = None
-    for k in range(len(items), 0, -1):
+    for k in ([items_k] if items_k else range(len(items), 0, -1)):
         new = [it for it in items[:k] if not it.get("backfill")] or items[:k]
         last = src.unit_range("nl", new[-1]["unit"])[1]
         passage = src.clip("nl", src.unit_range("nl", new[0]["unit"])[0], last)
-        tl, length = schedule(items, sents, frames, passage, k, combo, reviews)
-        if length <= (spec["minutes"] + spec.get("tolerance_min", 0.5)) * 60:
+        tl, length = schedule(items, sents, frames, passage, k, combo, reviews, first_speed)
+        if items_k or length <= (spec["minutes"] + spec.get("tolerance_min", 0.5)) * 60:
             best = (k, tl, length)
             break
     k, tl, length = best
@@ -644,12 +663,13 @@ def main(spec_path, out, name=None):
     new_items = [it for it in items[:k]]
     new_combos = [c for c in combo if c["id"] in taught]
     new_sents = [s for s in sents if s["id"] in taught]
-    learner.record(name, day,
-                   introduced=[f"{chapter}:{t['id']}" for t in new_items + new_combos + new_sents],
-                   reviewed=[r["key"] for r in reviews if r["id"] in taught],
-                   defs={**defs_of(chapter, new_items, "item"), **defs_of(chapter, new_combos, "combo"),
-                         **defs_of(chapter, new_sents, "sentence"),
-                         **defs_of(chapter, [r for r in reviews if r["id"] in resplit], "item")})
+    if record:
+        learner.record(name, day,
+                       introduced=[f"{chapter}:{t['id']}" for t in new_items + new_combos + new_sents],
+                       reviewed=[r["key"] for r in reviews if r["id"] in taught],
+                       defs={**defs_of(chapter, new_items, "item"), **defs_of(chapter, new_combos, "combo"),
+                             **defs_of(chapter, new_sents, "sentence"),
+                             **defs_of(chapter, [r for r in reviews if r["id"] in resplit], "item")})
     sidecar, gains, secs = render(src, tl, out, name)
     rep = dict(lesson=name, day=day, items=[it["id"] for it in items[:k]],
                reviews=[r["id"] for r in reviews], recombinations=[c["id"] for c in new_combos + new_sents],
@@ -658,9 +678,10 @@ def main(spec_path, out, name=None):
                en_cues_tts=sorted({c["item"] for c in tl if c.get("kind") == "en_cue" and c["clip"]["src"] == "tts"}),
                parts={it["id"]: len(it["parts"]) for it in items[:k] + reviews if it.get("parts")},
                uncovered=uncovered(src, learner, chapter),
-               index_versions={kk: v.version for kk, v in src.idx.items()})
+               index_versions={kk: v.version for kk, v in src.idx.items()},
+               first_play_speed=first_speed, recorded=record)
     (out / f"{name}.json").write_text(json.dumps(dict(report=rep, timeline=sidecar), ensure_ascii=False, indent=1))
-    rep["listen_check_clips"] = listen_check(src, tl, bank, out, name)
+    rep["listen_check_clips"] = listen_check(src, tl, bank, out, name) if record else "skipped (--no-record)"
     print(json.dumps(rep, indent=1))
     return rep
 
@@ -697,5 +718,8 @@ if __name__ == "__main__":
             for lang in ("nl", "en"):
                 for i, r in enumerate(v[lang]):
                     print(f"  {lang}[{i}] {r['book']} {r['words']}w {r['secs']}s | {r['text']}")
-    else:
-        main(*sys.argv[1:])
+    else:  # python -m batkol.lesson SPEC OUT [NAME] [--items K] [--no-record]
+        a = sys.argv[1:]
+        k = int(a[a.index("--items") + 1]) if "--items" in a else None
+        pos = [x for i, x in enumerate(a) if not x.startswith("--") and (i == 0 or a[i - 1] != "--items")]
+        main(*pos, items_k=k, record="--no-record" not in a)

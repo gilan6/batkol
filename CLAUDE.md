@@ -62,7 +62,8 @@ See `docs/flow_v2.md` for the reasons, with data, and the status.
    Pure computation on indexes; no ASR.
 3. **Cut and render:** index lookups plus ffmpeg (`batkol/lesson.py`). Lessons continue in chapter
    order. Reviews come from the learner state (`batkol/learner.py`, `~/work/learner/state.json`;
-   one lesson per day assumed). The interleaved audiobook (`batkol/interleaved.py`) plays each unit
+   one lesson per day assumed). Lesson pauses are reaction time plus 1.3 × the narrator's length (no cap);
+   the first play of a new item or part is at 0.8×, pitch kept. The interleaved audiobook (`batkol/interleaved.py`) plays each unit
    NL slowed to 0.8× with the pitch kept (`build.atempo`), then EN, then NL at normal speed.
    Levels (`batkol/build.py`): every source to -18 LUFS; an utterance more than 3 dB off is pulled
    back (by at most 6 dB); a -1 dBFS look-ahead limiter on the final mix.
@@ -91,6 +92,7 @@ uv run python -m batkol.lesson view 7 12                                # pause 
 # batkol/lessons/ch01_plan.json: DRAFT items for all of ch. 1 (A-W hand-picked; u012.* automatic and
 # unreviewed). Review a lesson's share before using it (batkol/plan.py; LaBSE vectors cached on Drive).
 uv run python -m batkol.lesson batkol/lessons/lesson03.json ~/work/lesson03  # build a lesson (records learner state)
+uv run python -m batkol.lesson batkol/lessons/lesson05.json ~/work/lesson05_v2 --items 5 --no-record  # rebuild, state untouched
 bash scripts/publish.sh HP/lessons HP/meta/lessons/lesson03 ~/work/lesson03/*  # after writing its README.md there
 # Long items (> 12 words / 4.5 s speech) need "parts" in the spec: book ranges cut where ok_cut allows,
 # each with "en_book" (audiobook cue) and/or "gloss" (Piper). Report field "uncovered" must stay empty.
