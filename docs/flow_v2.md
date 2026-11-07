@@ -172,12 +172,15 @@ The CTC score filter (≥ 0.5) does separate real gap words from hallucinations:
   (lesson 3: X1). Long items taught whole are reviewed as their parts (`resplit` in the spec).
 - **Long material without a safe split** (H) and long sentence drills are recalled repeat-only.
 - **Lessons 4 and 5: done.** Lesson 4 covers units 9–12 (30.9 min; `tolerance_min` 2.5 lets unit 12, the end
-  of the paragraph, in). Lesson 5 covers units 13–17 (27.6 min).
+  of the paragraph, in). Lesson 5 covers units 13–17 (27.6 min; rebuilt: 31.3 min).
 - **Lessons 6 and 7: done**, leveled like the README examples (`build.match_loudness`): -18.5 LUFS whole
-  file, per-voice medians within 2 dB (lesson 5, built before the leveling: -20.3 LUFS).
-  - Lesson 6 covers units 18–24 (27.9 min).
+  file, per-voice medians within 2 dB (lesson 5 was -20.3 LUFS until its rebuild).
+  - Lesson 6 covers units 18–24 (27.9 min; rebuilt: 30.8 min).
   - Lesson 7 covers units 25–27 (30.9 min). At 30 min it stopped after U27a and left the rest of unit 27 in
     `uncovered`, so its candidates end at U27b and `tolerance_min` 2.5 lets it in.
+- **Timing since 2026-11-07:** pauses are reaction time plus 1.3 × the narrator's length (no cap); first plays
+  of new items and parts at 0.8×. Lessons 5 and 6 were rebuilt with it (`--items K --no-record`: same items,
+  learner state untouched).
 - **Lesson 8 continues at U28a (unit 28).** `lesson06.json` already holds U28a–U30a as untaught candidates.
   In unit 30, book 624–642 is two sentences joined by a narrator's added "ja" after a breath, with no clean
   cut between them: teach it whole, like H.
